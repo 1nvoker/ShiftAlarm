@@ -49,6 +49,8 @@ public class ActiveAlarmService : Service
         _player.SetOnPreparedListener(callbacks);
         _player.SetOnInfoListener(callbacks);
         _player.SetOnErrorListener(callbacks);
+
+        //Vibration.Default.Vibrate(500);
     }
 
     [return: GeneratedEnum]
@@ -63,8 +65,8 @@ public class ActiveAlarmService : Service
 
         var notification = new NotificationCompat.Builder(context, MainApplication.ChannelId)
             .SetSmallIcon(Resource.Drawable.ic_clock_black_24dp)
-            .SetContentTitle("CAT ALARM!")
-            .SetContentText("Mew mew mew mew mew mew!")
+            .SetContentTitle("起床啦!")
+            .SetContentText("今天是白班。保持好心情，工作加油吖~")
             .SetPriority(NotificationCompat.PriorityHigh)
             .SetCategory(NotificationCompat.CategoryAlarm)
             .SetContentIntent(pendingIntent)
@@ -84,12 +86,16 @@ public class ActiveAlarmService : Service
         _player?.Release();
         _player?.Dispose();
 
+        //Vibration.Default.Cancel();
+
         App.Current.IsAlarmActive = false;
     }
 
     public void Stop()
     {
         App.Current.IsAlarmActive = false;
+
+        //Vibration.Default.Cancel();
 
         _player?.Stop();
         StopForeground(StopForegroundFlags.Remove);

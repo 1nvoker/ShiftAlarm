@@ -15,7 +15,7 @@ public partial class App : Application
 
         InitializeComponent();
 
-        MainPage = ServiceProvider.GetRequiredService<MainPage>();
+        MainPage = new AppShell();
         alarmService.EnsureAlarmIsSetIfEnabled();
     }
 

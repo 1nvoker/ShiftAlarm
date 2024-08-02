@@ -5,11 +5,19 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:MauiCatAlarm"
     Shell.FlyoutBehavior="Disabled"
+    Shell.ForegroundColor="Black"
+    TabBarBackgroundColor="Black" 
+    TabBarForegroundColor="Beige" 
+    TabBarUnselectedColor="Gray"
+    TabBarTitleColor="Beige"
     Title="MauiCatAlarm">
-
-    <ShellContent
-        Title="CAT ALARM"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    <TabBar>
+        <Tab Title="排班闹钟">
+            <ShellContent ContentTemplate="{DataTemplate local:MainPage}" />
+        </Tab>
+        <Tab Title="班别设置">
+            <ShellContent ContentTemplate="{DataTemplate local:SettingPage}" />
+        </Tab>
+    </TabBar>
 
 </Shell>

@@ -7,7 +7,7 @@
              Title="AlarmPage"
              Style="{StaticResource DangerPage}">
     <VerticalStackLayout>
-        <Label Text="CAT ALARM!"
+        <Label Text="排班闹钟"
                Style="{StaticResource SubheadingDanger}"/>
 
         <Label Text="{Binding Challenge.Prompt}"
@@ -21,7 +21,7 @@
                ReturnCommand="{Binding DismissAlarmCommand}"
                Style="{StaticResource DangerEntry}"/>
 
-        <Button Text="Stop alarm"
+        <Button Text="关掉闹钟"
                 Command="{Binding DismissAlarmCommand}"
                 Style="{StaticResource DangerButton}"/>
 

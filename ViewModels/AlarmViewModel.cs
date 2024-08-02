@@ -59,12 +59,13 @@ public class AlarmViewModel : ObservableObject
 
     private bool CanDismissAlarm()
     {
-        return Challenge.Validate(ChallengeEntryText);
+        //return Challenge.Validate(ChallengeEntryText);
+        return true;
     }
 
     private void DismissAlarm()
     {
-        if (!Challenge.Validate(ChallengeEntryText)) return;
+        //if (!Challenge.Validate(ChallengeEntryText)) return;
 
         _alarmService.DismissAlarm();
 

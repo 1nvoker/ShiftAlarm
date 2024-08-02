@@ -47,5 +47,28 @@ public class MainActivity : MauiAppCompatActivity
 
             alarmService.SetAlarmRingtone(title ?? "Unknown", filePath);
         }
+
+        if (data != null && requestCode == Services.ShiftSetService.RingtonePickerRequestCode)
+        {
+            var sService = App.Current.ServiceProvider.GetRequiredService<ShiftSetService>();
+            var uri = data.GetParcelableExtra<Android.Net.Uri>(RingtoneManager.ExtraRingtonePickedUri);
+            if (uri == null)
+            {
+                sService.SetDefaultAlarmRingtone();
+                return;
+            }
+
+            var ringtone = RingtoneManager.GetRingtone(ApplicationContext, uri);
+            var title = ringtone?.GetTitle(ApplicationContext);
+
+            var filePath = uri?.ToString();
+            if (filePath == null)
+            {
+                Log.Error("MainActivity", "Picked ringtone URI ToString() is null (but URI itself is not null)");
+                return;
+            }
+
+            sService.SetAlarmRingtone(title ?? "Unknown", filePath);
+        }
     }
 }

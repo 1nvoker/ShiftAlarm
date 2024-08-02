@@ -4,37 +4,33 @@
              xmlns:vm="clr-namespace:MauiCatAlarm.ViewModels"
              x:Class="MauiCatAlarm.MainPage"
              x:DataType="vm:MainViewModel">
+
     <ScrollView>
         <VerticalStackLayout>
-            <VerticalStackLayout Spacing="0">
-                <HorizontalStackLayout HorizontalOptions="Start"
+            <HorizontalStackLayout HorizontalOptions="Start"
                                        Spacing="6"
                                        Padding="0">
-                    <Label Text="{Binding CurrentWeekday}"
-                           Style="{StaticResource Subheading}"
-                           Margin="0,0,48,0" />
-                    <Label Text="{Binding CurrentMonth}"
-                           Style="{StaticResource SubheadingMonth}" />
-                    <Label Text="{Binding CurrentDayNumber}"
-                           Style="{StaticResource SubheadingDayNumber}" />
-                </HorizontalStackLayout>
-
+                <Label Text="{Binding CurrentWeekday}"
+                           Style="{StaticResource Subheading}"/>
+                <Label Text="{Binding CurrentMonth}"
+                           Style="{StaticResource Subheading}" />
+                <Label Text="{Binding CurrentDayNumber}"
+                           Style="{StaticResource Subheading}" />
                 <Label Text="{Binding CurrentTime}"
-                       Style="{StaticResource Heading}" />
-            </VerticalStackLayout>
-
+                       Style="{StaticResource Subheading}" />
+            </HorizontalStackLayout>
 
             <!-- Show an ongoing alarm in case the notification was dismissed -->
-            <Label Text="Wake up!"
+            <Label Text="起床了!"
                    IsVisible="{Binding IsAlarmOngoing}" />
-            <Button Text="Turn off alarm"
+            <Button Text="关掉闹钟"
                     IsVisible="{Binding IsAlarmOngoing}"
                     Command="{Binding NavigateToAlarmCommand}"
                     Style="{StaticResource DangerButton}"
                     Margin="0,0,0,48" />
 
             <!-- Show time picker when alarm is disabled -->
-            <Label Text="Wake me up at:"
+            <Label Text="叫我起来:"
                    IsVisible="{Binding IsAlarmUnset}" />
             <TimePicker Time="{Binding AlarmTime}"
                         Format="t"
@@ -48,9 +44,9 @@
                     Command="{Binding ToggleAlarmCommand}"
                     Style="{StaticResource PrimaryButton}" />
 
-            <Label Text="{Binding AlarmRingtoneName, StringFormat='Alarm: {0}'}"
+            <Label Text="{Binding AlarmRingtoneName, StringFormat='闹钟铃声: {0}'}"
                    Margin="0,24,0,0" />
-            <Button Text="Change"
+            <Button Text="更改"
                     Command="{Binding UpdateAlarmRingtoneCommand}"
                     Style="{StaticResource SecondaryButton}" />
         </VerticalStackLayout>

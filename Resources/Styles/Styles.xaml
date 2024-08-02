@@ -211,7 +211,7 @@
         <Setter Property="TextColor"
                 Value="{StaticResource TextPrimary}" />
         <Setter Property="FontSize"
-                Value="60" />
+                Value="40" />
         <Setter Property="LineHeight"
                 Value="1" />
         <Setter Property="FontFamily"

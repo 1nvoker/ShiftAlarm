@@ -82,7 +82,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="SettingPage.xaml.cs">
+	    <DependentUpon>SettingPage.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
 	  <MauiXaml Update="AlarmPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="SettingPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

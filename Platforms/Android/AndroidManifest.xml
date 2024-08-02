@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="net.vivelin.catalarm" android:versionCode="6" android:versionName="1.3.2">
-	<application android:allowBackup="true" android:icon="@mipmap/appicon" android:supportsRtl="true" android:label="CAT ALARM"></application>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="net.fc.shiftalarm" android:versionCode="5" android:versionName="1.0.4">
+	<application android:allowBackup="true" android:supportsRtl="true" android:label="排班闹钟" android:icon="@mipmap/appicon"></application>
 	<uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 	<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 	<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -8,5 +8,8 @@
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+	<uses-permission android:name="android.permission.VIBRATE" />
+	<uses-permission android:name="android.permission.WAKE_LOCK" />
+	<uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
 	<uses-sdk android:minSdkVersion="26" android:targetSdkVersion="31" />
 </manifest>

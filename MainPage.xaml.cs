@@ -14,4 +14,9 @@ public partial class MainPage : ContentPage
 
         InitializeComponent();
     }
+
+    //public MainPage()
+    //{
+    //    InitializeComponent();
+    //}
 }

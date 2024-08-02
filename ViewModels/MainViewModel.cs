@@ -49,7 +49,7 @@ public class MainViewModel : ObservableObject, IDisposable
 
     public string CurrentDayNumber => DateTime.Now.ToString("dd");
 
-    public string ToggleAlarmText => IsAlarmSet ? "Disable alarm" : "Set alarm";
+    public string ToggleAlarmText => IsAlarmSet ? "禁用闹钟" : "启用闹钟";
 
     public string EnabledAlarmLabel => FormatAlarmText();
 
@@ -100,9 +100,9 @@ public class MainViewModel : ObservableObject, IDisposable
                 if (App.Current.MainPage != null)
                 {
                     await App.Current.MainPage.DisplayAlert(
-                        "Permission required",
-                        "An alarm app without permissions to show you alarms is pretty sad.",
-                        "OK");
+                        "需要权限",
+                        "一个没有权限显示闹钟的闹钟应用可太悲哀了.",
+                        "好的");
                 }
                 return;
             }
@@ -160,10 +160,10 @@ public class MainViewModel : ObservableObject, IDisposable
 
         if (nextOccurrence.Value.Date > DateTime.Today)
         {
-            return $"You'll be woken up at {nextOccurrence.Value:t} tomorrow.";
+            return $"将于明天 {nextOccurrence.Value:t} 醒来.";
         }
 
-        return $"You'll be woken up at {nextOccurrence.Value:t}.";
+        return $"将于 {nextOccurrence.Value:t} 醒来.";
     }
 
     private DateTime? NextAlarm()
@@ -209,7 +209,7 @@ public class MainViewModel : ObservableObject, IDisposable
         //    using var targetFile = File.Create(targetPath);
         //    await selectedFile.CopyToAsync(targetFile);
 
-        //    _alarmService.SetAlarmRingtone(result.FileName, targetPath);
+        //    _shiftSetService.SetAlarmRingtone(result.FileName, targetPath);
         //}
     }
 }

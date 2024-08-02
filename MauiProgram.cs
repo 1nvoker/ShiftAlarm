@@ -20,6 +20,7 @@ public static class MauiProgram
 
         builder.Services.AddTransient<MainViewModel>();
         builder.Services.AddTransient<AlarmViewModel>();
+        builder.Services.AddTransient<SettingViewModel>();
 
         builder.Services.AddTransient<MainPage>();
         builder.Services.AddTransient<Func<MainPage>>(provider =>
@@ -31,8 +32,14 @@ public static class MauiProgram
         {
             return () => provider.GetRequiredService<AlarmPage>();
         });
+        builder.Services.AddTransient<SettingPage>();
+        builder.Services.AddTransient<Func<SettingPage>>(provider =>
+        {
+            return () => provider.GetRequiredService<SettingPage>();
+        });
         builder.Services.AddTransient<IChallengeFactory, BasicChallengeFactory>();
         builder.Services.AddSingleton<AlarmService>();
+        builder.Services.AddSingleton<ShiftSetService>();
 
 #if DEBUG
 		builder.Logging.AddDebug();
