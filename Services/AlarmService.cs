@@ -8,7 +8,7 @@ public partial class AlarmService
 
     public event EventHandler? IsEnabledChanged;
 
-    public event EventHandler? RingtoneChanged;
+    //public event EventHandler? RingtoneChanged;
 
     public partial void SetAlarm(TimeSpan startTime);
 
@@ -24,15 +24,15 @@ public partial class AlarmService
 
     public partial TimeSpan? GetScheduledTime();
 
-    public partial void SetAlarmRingtone(string name, string filePath);
+    //public partial void SetAlarmRingtone(string name, string filePath);
 
-    public partial void PickAlarmRingtone();
+    //public partial void PickAlarmRingtone();
 
-    public partial void SetDefaultAlarmRingtone();
+    //public partial void SetDefaultAlarmRingtone();
     
-    public partial string GetAlarmRingtoneName();
+    //public partial string GetAlarmRingtoneName();
 
-    public partial string? GetAlarmRingtone();
+    //public partial string? GetAlarmRingtone();
 
     protected virtual void OnScheduledTimeChanged(object sender, EventArgs e)
     {
@@ -44,8 +44,8 @@ public partial class AlarmService
         IsEnabledChanged?.Invoke(sender, e);
     }
 
-    protected virtual void OnRingtoneChanged(object sender, EventArgs e)
-    {
-        RingtoneChanged?.Invoke(sender, e);
-    }
+    //protected virtual void OnRingtoneChanged(object sender, EventArgs e)
+    //{
+    //    RingtoneChanged?.Invoke(sender, e);
+    //}
 }

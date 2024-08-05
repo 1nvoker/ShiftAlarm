@@ -37,7 +37,6 @@ public static class MauiProgram
         {
             return () => provider.GetRequiredService<SettingPage>();
         });
-        builder.Services.AddTransient<IChallengeFactory, BasicChallengeFactory>();
         builder.Services.AddSingleton<AlarmService>();
         builder.Services.AddSingleton<ShiftSetService>();
 

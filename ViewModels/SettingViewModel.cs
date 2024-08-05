@@ -42,8 +42,6 @@ namespace MauiCatAlarm.ViewModels
 
         public ICommand UpdateAlarmRingtoneCommand { get; }
 
-        public ICommand SaveSettings { get; }
-
         public SettingViewModel(ShiftSetService shiftsetService)
         {
             _shiftSetService = shiftsetService;
@@ -57,7 +55,6 @@ namespace MauiCatAlarm.ViewModels
             AlarmTimeNight = _shiftSetService.GetScheduledTimeNight() ?? new TimeSpan(23, 40, 0);
 
             UpdateAlarmRingtoneCommand = new AsyncRelayCommand(UpdateAlarmRingtoneAsync);
-            SaveSettings = new Command(SaveShiftSettings);
 
             Debug.WriteLine(string.Format("SettingViewModel {0}", AlarmTimeDay.ToString("hh\\:mm", CultureInfo.InvariantCulture)));
         }
@@ -123,12 +120,19 @@ namespace MauiCatAlarm.ViewModels
             //}
         }
 
-        public void SaveShiftSettings()
+        public void SaveShiftSettingsDay()
         {
             _shiftSetService.SetScheduledTimeDay(AlarmTimeDay);
+        }
+
+        public void SaveShiftSettingsMid()
+        {
             _shiftSetService.SetScheduledTimeMid(AlarmTimeMid);
+        }
+
+        public void SaveShiftSettingsNight()
+        {
             _shiftSetService.SetScheduledTimeNight(AlarmTimeNight);
-            Debug.WriteLine(string.Format("SaveShiftSettings {0}", AlarmTimeDay.ToString("hh\\:mm", CultureInfo.InvariantCulture)));
         }
     }
 }

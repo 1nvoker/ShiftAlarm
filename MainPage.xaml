@@ -43,12 +43,6 @@
             <Button Text="{Binding ToggleAlarmText}"
                     Command="{Binding ToggleAlarmCommand}"
                     Style="{StaticResource PrimaryButton}" />
-
-            <Label Text="{Binding AlarmRingtoneName, StringFormat='闹钟铃声: {0}'}"
-                   Margin="0,24,0,0" />
-            <Button Text="更改"
-                    Command="{Binding UpdateAlarmRingtoneCommand}"
-                    Style="{StaticResource SecondaryButton}" />
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

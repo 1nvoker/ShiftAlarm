@@ -22,13 +22,12 @@ public class MainViewModel : ObservableObject, IDisposable
 
         _alarmService.IsEnabledChanged += AlarmService_IsEnabledChanged;
         _alarmService.ScheduledTimeChanged += AlarmService_ScheduledTimeChanged;
-        _alarmService.RingtoneChanged += AlarmService_RingtoneChanged;
         App.Current.PropertyChanged += App_PropertyChanged;
 
         AlarmTime = _alarmService.GetScheduledTime() ?? new TimeSpan(9, 0, 0);
         ToggleAlarmCommand = new AsyncRelayCommand(ToggleAlarmAsync);
         NavigateToAlarmCommand = new RelayCommand(NavigateToAlarm);
-        UpdateAlarmRingtoneCommand = new AsyncRelayCommand(UpdateAlarmRingtoneAsync);
+        //UpdateAlarmRingtoneCommand = new AsyncRelayCommand(UpdateAlarmRingtoneAsync);
 
         App.Current.Dispatcher.StartTimer(TimeSpan.FromSeconds(1), () =>
         {
@@ -63,15 +62,13 @@ public class MainViewModel : ObservableObject, IDisposable
 
     public ICommand NavigateToAlarmCommand { get; }
 
-    public ICommand UpdateAlarmRingtoneCommand { get; }
+    //public ICommand UpdateAlarmRingtoneCommand { get; }
 
     public TimeSpan AlarmTime
     {
         get => _alarmTime;
         set => SetProperty(ref _alarmTime, value);
     }
-
-    public string AlarmRingtoneName => _alarmService.GetAlarmRingtoneName();
 
     public void Dispose()
     {
@@ -122,11 +119,6 @@ public class MainViewModel : ObservableObject, IDisposable
     {
         var alarmPage = _alarmPageFactory();
         App.Current.MainPage = alarmPage;
-    }
-
-    private void AlarmService_RingtoneChanged(object? sender, EventArgs e)
-    {
-        OnPropertyChanged(nameof(AlarmRingtoneName));
     }
 
     private void AlarmService_ScheduledTimeChanged(object? sender, EventArgs e)
@@ -182,34 +174,34 @@ public class MainViewModel : ObservableObject, IDisposable
         return nextOccurence;
     }
 
-    private Task UpdateAlarmRingtoneAsync()
-    {
-        _alarmService.PickAlarmRingtone();
-        return Task.CompletedTask;
+    //private task updatealarmringtoneasync()
+    //{
+    //    _alarmservice.pickalarmringtone();
+    //    return task.completedtask;
 
-        //var fileTypes = new Dictionary<DevicePlatform, IEnumerable<string>>()
-        //{
-        //    [DevicePlatform.Android] = ["audio/*"]
-        //};
+    //    //var filetypes = new dictionary<deviceplatform, ienumerable<string>>()
+    //    //{
+    //    //    [deviceplatform.android] = ["audio/*"]
+    //    //};
 
-        //var result = await FilePicker.Default.PickAsync(new PickOptions
-        //{
-        //    PickerTitle = "Select alarm ringtone",
-        //    FileTypes = new(fileTypes)
-        //});
+    //    //var result = await filepicker.default.pickasync(new pickoptions
+    //    //{
+    //    //    pickertitle = "select alarm ringtone",
+    //    //    filetypes = new(filetypes)
+    //    //});
 
-        //if (result != null)
-        //{
-        //    // It seems MAUI copies the selected file to the cache dir, but
-        //    // Android might clear that, so we should copy it to the app data
-        //    // dir.
-        //    using var selectedFile = await result.OpenReadAsync();
-        //    var targetPath = Path.Combine(FileSystem.Current.AppDataDirectory, result.FileName);
+    //    //if (result != null)
+    //    //{
+    //    //    // it seems maui copies the selected file to the cache dir, but
+    //    //    // android might clear that, so we should copy it to the app data
+    //    //    // dir.
+    //    //    using var selectedfile = await result.openreadasync();
+    //    //    var targetpath = path.combine(filesystem.current.appdatadirectory, result.filename);
 
-        //    using var targetFile = File.Create(targetPath);
-        //    await selectedFile.CopyToAsync(targetFile);
+    //    //    using var targetfile = file.create(targetpath);
+    //    //    await selectedfile.copytoasync(targetfile);
 
-        //    _shiftSetService.SetAlarmRingtone(result.FileName, targetPath);
-        //}
-    }
+    //    //    _shiftsetservice.setalarmringtone(result.filename, targetpath);
+    //    //}
+    //}
 }

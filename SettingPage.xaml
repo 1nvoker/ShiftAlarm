@@ -3,65 +3,55 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:MauiCatAlarm.ViewModels"
              x:Class="MauiCatAlarm.SettingPage"
-             x:DataType="vm:SettingViewModel">
+             x:DataType="vm:SettingViewModel" BackgroundColor="#000000">
     <VerticalStackLayout>
-        <HorizontalStackLayout>
+        <Label Text="献给至爱♥孙东晓♥:"/>
+        <Label Text="深情不及久伴,厚爱无需多言。--f.c."/>
+        <Label
+                Text="{Binding AlarmRingtoneName, StringFormat='铃声:{0}'}"
+                VerticalOptions="Center"
+                HorizontalOptions="Start"
+            Margin="0,50,0,0"
+                />
+        <Button
+                Text="更改铃声"
+                Command="{Binding UpdateAlarmRingtoneCommand}"
+                VerticalOptions="Center"
+                HorizontalOptions="FillAndExpand"
+                Style="{StaticResource PrimaryButton}" />
+        <HorizontalStackLayout HorizontalOptions="CenterAndExpand" Spacing="20">
             <Label
                 Text="白班"
-                VerticalOptions="Center"
-                HorizontalOptions="Start" />
+                VerticalOptions="Center" TextColor="#C1F7F6"/>
 
             <TimePicker
                 Time="{Binding AlarmTimeDay}"
                 VerticalOptions="Center"
-                HorizontalOptions="End"
-                Format="t"/>
+                Format="t"
+                PropertyChanged="TimePickerDay_PropertyChanged"
+                />
         </HorizontalStackLayout>
-        <HorizontalStackLayout>
+        <HorizontalStackLayout HorizontalOptions="CenterAndExpand" Spacing="20">
             <Label
                 Text="中班"
-                VerticalOptions="Center"
-                HorizontalOptions="Start" />
+                VerticalOptions="Center" TextColor="#F8A313"/>
 
             <TimePicker
                 Time="{Binding AlarmTimeMid}"
                 VerticalOptions="Center"
-                HorizontalOptions="End"
-                Format="t"/>
+                Format="t"
+                PropertyChanged="TimePickerMid_PropertyChanged"/>
         </HorizontalStackLayout>
-        <HorizontalStackLayout>
+        <HorizontalStackLayout HorizontalOptions="CenterAndExpand" Spacing="20">
             <Label
                 Text="夜班"
-                VerticalOptions="Center"
-                HorizontalOptions="Start" />
+                VerticalOptions="Center" TextColor="#419EF8"/>
 
             <TimePicker
                 Time="{Binding AlarmTimeNight}"
                 VerticalOptions="Center"
-                HorizontalOptions="End"
-                Format="t"/>
+                Format="t"
+                PropertyChanged="TimePickerNight_PropertyChanged"/>
         </HorizontalStackLayout>
-        <HorizontalStackLayout>
-            <Label
-                Text="{Binding AlarmRingtoneName, StringFormat='铃声:{0}'}"
-                VerticalOptions="Center"
-                HorizontalOptions="Start"
-                />
-            <Button
-                Text="更改"
-                Command="{Binding UpdateAlarmRingtoneCommand}"
-                VerticalOptions="Center"
-                HorizontalOptions="End"
-                Style="{StaticResource SecondaryButton}" />
-        </HorizontalStackLayout>
-        <HorizontalStackLayout>
-            <Button
-                Text="保存"
-                Command="{Binding SaveSettings}"
-                VerticalOptions="Center" 
-                HorizontalOptions="Center"
-                Style="{StaticResource PrimaryButton}" />
-        </HorizontalStackLayout>
-        <Label Text="献给挚爱晓宝贝:深情不及久伴,厚爱无需多言。--f.c."/>
     </VerticalStackLayout>
 </ContentPage>

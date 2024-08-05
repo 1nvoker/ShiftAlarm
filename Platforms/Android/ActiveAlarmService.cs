@@ -50,7 +50,6 @@ public class ActiveAlarmService : Service
         _player.SetOnInfoListener(callbacks);
         _player.SetOnErrorListener(callbacks);
 
-        //Vibration.Default.Vibrate(500);
     }
 
     [return: GeneratedEnum]
@@ -73,8 +72,16 @@ public class ActiveAlarmService : Service
             .SetFullScreenIntent(pendingIntent, true)
             .SetOngoing(true)
             .SetVisibility((int)NotificationVisibility.Public)
+            //.SetAutoCancel(true)
+            //.SetVibrate(new long[] { 0, 500, 500, 500 })
+            //.SetSound(GetAlarmRingtoneUri())
+            //.SetDefaults((int)NotificationDefaults.All)
             .Build();
 
+        //notification.Flags |= NotificationFlags.Insistent;
+        //notification.Flags |= NotificationFlags.NoClear;
+
+        //Log.Info("AlarmMediaService", "flag is " + notification.Flags);
         StartForeground(NotificationId, notification);
         return StartCommandResult.Sticky;
     }
@@ -86,16 +93,12 @@ public class ActiveAlarmService : Service
         _player?.Release();
         _player?.Dispose();
 
-        //Vibration.Default.Cancel();
-
         App.Current.IsAlarmActive = false;
     }
 
     public void Stop()
     {
         App.Current.IsAlarmActive = false;
-
-        //Vibration.Default.Cancel();
 
         _player?.Stop();
         StopForeground(StopForegroundFlags.Remove);
