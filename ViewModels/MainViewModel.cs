@@ -70,6 +70,18 @@ public class MainViewModel : ObservableObject, IDisposable
         set => SetProperty(ref _alarmTime, value);
     }
 
+    public List<string> Shifts
+    {
+        get => new List<string>() { "白班", "中班", "夜班", "休息"};
+    }
+
+    private string _selectShift1 = "休息";
+    public string SelectShift1
+    {
+        get => _selectShift1;
+        set => SetProperty(ref _selectShift1, value);
+    }
+
     public void Dispose()
     {
         Dispose(disposing: true);
@@ -174,34 +186,4 @@ public class MainViewModel : ObservableObject, IDisposable
         return nextOccurence;
     }
 
-    //private task updatealarmringtoneasync()
-    //{
-    //    _alarmservice.pickalarmringtone();
-    //    return task.completedtask;
-
-    //    //var filetypes = new dictionary<deviceplatform, ienumerable<string>>()
-    //    //{
-    //    //    [deviceplatform.android] = ["audio/*"]
-    //    //};
-
-    //    //var result = await filepicker.default.pickasync(new pickoptions
-    //    //{
-    //    //    pickertitle = "select alarm ringtone",
-    //    //    filetypes = new(filetypes)
-    //    //});
-
-    //    //if (result != null)
-    //    //{
-    //    //    // it seems maui copies the selected file to the cache dir, but
-    //    //    // android might clear that, so we should copy it to the app data
-    //    //    // dir.
-    //    //    using var selectedfile = await result.openreadasync();
-    //    //    var targetpath = path.combine(filesystem.current.appdatadirectory, result.filename);
-
-    //    //    using var targetfile = file.create(targetpath);
-    //    //    await selectedfile.copytoasync(targetfile);
-
-    //    //    _shiftsetservice.setalarmringtone(result.filename, targetpath);
-    //    //}
-    //}
 }

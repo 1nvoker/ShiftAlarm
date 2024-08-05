@@ -43,6 +43,105 @@
             <Button Text="{Binding ToggleAlarmText}"
                     Command="{Binding ToggleAlarmCommand}"
                     Style="{StaticResource PrimaryButton}" />
+
+            <HorizontalStackLayout HorizontalOptions="CenterAndExpand"
+                                       Spacing="100"
+                                       Padding="0">
+                <Label Text="周一"
+                       VerticalOptions="Center"/>
+                
+                <Picker FontSize="16" Title="选择班次"
+                    ItemsSource="{Binding Shifts}"
+                    ItemDisplayBinding="{Binding SelectShift1}" 
+                    SelectedItem="{Binding SelectShift1}"
+                    BackgroundColor="#90DEFF"
+                        VerticalOptions="Center"
+                    />
+            </HorizontalStackLayout>
+            <HorizontalStackLayout HorizontalOptions="CenterAndExpand"
+                                       Spacing="100"
+                                       Padding="0">
+                <Label Text="周二"
+                       VerticalOptions="Center"/>
+
+                <Picker FontSize="16" Title="选择班次"
+                    ItemsSource="{Binding Shifts}"
+                    ItemDisplayBinding="{Binding SelectShift1}" 
+                    SelectedItem="{Binding SelectShift1}"
+                    BackgroundColor="#90DEFF"
+                        VerticalOptions="Center"
+                    />
+            </HorizontalStackLayout>
+            <HorizontalStackLayout HorizontalOptions="CenterAndExpand"
+                                       Spacing="100"
+                                       Padding="0">
+                <Label Text="周三"
+                       VerticalOptions="Center"/>
+
+                <Picker FontSize="16" Title="选择班次"
+                    ItemsSource="{Binding Shifts}"
+                    ItemDisplayBinding="{Binding SelectShift1}" 
+                    SelectedItem="{Binding SelectShift1}"
+                    BackgroundColor="#90DEFF"
+                        VerticalOptions="Center"
+                    />
+            </HorizontalStackLayout>
+            <HorizontalStackLayout HorizontalOptions="CenterAndExpand"
+                                       Spacing="100"
+                                       Padding="0">
+                <Label Text="周四"
+                       VerticalOptions="Center"/>
+
+                <Picker FontSize="16" Title="选择班次"
+                    ItemsSource="{Binding Shifts}"
+                    ItemDisplayBinding="{Binding SelectShift1}" 
+                    SelectedItem="{Binding SelectShift1}"
+                    BackgroundColor="#90DEFF"
+                        VerticalOptions="Center"
+                    />
+            </HorizontalStackLayout>
+            <HorizontalStackLayout HorizontalOptions="CenterAndExpand"
+                                       Spacing="100"
+                                       Padding="0">
+                <Label Text="周五"
+                       VerticalOptions="Center"/>
+
+                <Picker FontSize="16" Title="选择班次"
+                    ItemsSource="{Binding Shifts}"
+                    ItemDisplayBinding="{Binding SelectShift1}" 
+                    SelectedItem="{Binding SelectShift1}"
+                    BackgroundColor="#90DEFF"
+                        VerticalOptions="Center"
+                    />
+            </HorizontalStackLayout>
+            <HorizontalStackLayout HorizontalOptions="CenterAndExpand"
+                                       Spacing="100"
+                                       Padding="0">
+                <Label Text="周六"
+                       VerticalOptions="Center"/>
+
+                <Picker FontSize="16" Title="选择班次"
+                    ItemsSource="{Binding Shifts}"
+                    ItemDisplayBinding="{Binding SelectShift1}" 
+                    SelectedItem="{Binding SelectShift1}"
+                    BackgroundColor="#90DEFF"
+                        VerticalOptions="Center"
+                    />
+            </HorizontalStackLayout>
+            <HorizontalStackLayout HorizontalOptions="CenterAndExpand"
+                                       Spacing="100"
+                                       Padding="0">
+                <Label Text="周日"
+                       VerticalOptions="Center"/>
+
+                <Picker FontSize="16" Title="选择班次"
+                    ItemsSource="{Binding Shifts}"
+                    ItemDisplayBinding="{Binding SelectShift1}" 
+                    SelectedItem="{Binding SelectShift1}"
+                    BackgroundColor="#90DEFF"
+                        VerticalOptions="Center"
+                    />
+            </HorizontalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

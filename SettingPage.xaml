@@ -6,7 +6,7 @@
              x:DataType="vm:SettingViewModel" BackgroundColor="#000000">
     <VerticalStackLayout>
         <Label Text="献给至爱♥孙东晓♥:"/>
-        <Label Text="深情不及久伴,厚爱无需多言。--f.c."/>
+        <Label Text="{Binding LoveTalk, StringFormat='{0}'}"/>
         <Label
                 Text="{Binding AlarmRingtoneName, StringFormat='铃声:{0}'}"
                 VerticalOptions="Center"

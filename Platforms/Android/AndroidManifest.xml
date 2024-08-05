@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="net.fc.shiftalarm" android:versionCode="8" android:versionName="1.0.7">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="net.fc.shiftalarm" android:versionCode="9" android:versionName="1.0.8">
 	<application android:allowBackup="true" android:supportsRtl="true" android:label="排班闹钟" android:icon="@mipmap/appicon"></application>
 	<uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 	<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
