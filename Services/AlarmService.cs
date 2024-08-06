@@ -8,7 +8,7 @@ public partial class AlarmService
 
     public event EventHandler? IsEnabledChanged;
 
-    public event EventHandler? Shift1Changed;
+    public event EventHandler<byte>? ShiftChanged;
 
     public event EventHandler<byte>? IsEnabledChangedWeek;
 

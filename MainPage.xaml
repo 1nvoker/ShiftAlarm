@@ -50,21 +50,21 @@
                 <Label Text="周一"
                        VerticalOptions="Center"/>
 
-                <Button Text="{Binding SelectShift1}"
-                    Command="{Binding ToggleShift1Command}"
-                    BackgroundColor="{Binding BtnBackgroundColor1}"
+                <Button Text="{Binding SelectShift2}"
+                    Command="{Binding ToggleShift2Command}"
+                    BackgroundColor="{Binding BtnBackgroundColor2}"
                         TextColor="#000000"/>
             </HorizontalStackLayout>
 
             <HorizontalStackLayout HorizontalOptions="CenterAndExpand"
                                        Spacing="100"
                                        Padding="0">
-                <Label Text="周二"
+                <Label Text="周三"
                        VerticalOptions="Center"/>
 
-                <Button Text="{Binding SelectShift2}"
-                    Command="{Binding ToggleShift2Command}"
-                    BackgroundColor="{Binding BtnBackgroundColor2}"
+                <Button Text="{Binding SelectShift4}"
+                    Command="{Binding ToggleShift4Command}"
+                    BackgroundColor="{Binding BtnBackgroundColor4}"
                         TextColor="#000000"/>
             </HorizontalStackLayout>
         </VerticalStackLayout>

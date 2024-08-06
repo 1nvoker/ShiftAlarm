@@ -22,20 +22,26 @@ public class MainViewModel : ObservableObject, IDisposable
 
         _alarmService.IsEnabledChanged += AlarmService_IsEnabledChanged;
         _alarmService.ScheduledTimeChanged += AlarmService_ScheduledTimeChanged;
-        _alarmService.Shift1Changed += AlarmService_Shift1Changed;
+        _alarmService.ShiftChanged += AlarmService_ShiftChanged;
         _alarmService.IsEnabledChangedWeek += AlarmService_IsEnableChangedWeek;
 
         App.Current.PropertyChanged += App_PropertyChanged;
 
         AlarmTime = _alarmService.GetScheduledTime() ?? new TimeSpan(9, 0, 0);
-        _idx1 = _alarmService.GetShifti(3);
-        OnPropertyChanged(nameof(SelectShift1));
-        BtnBackgroundColor1 = GetColorFromShift(_idx1);
-        OnPropertyChanged(nameof(BtnBackgroundColor1));
+        _idx2 = _alarmService.GetShifti(2);
+        OnPropertyChanged(nameof(SelectShift2));
+        BtnBackgroundColor2 = GetColorFromShift(_idx2);
+        OnPropertyChanged(nameof(BtnBackgroundColor2));
+
+        _idx4 = _alarmService.GetShifti(4);
+        OnPropertyChanged(nameof(SelectShift4));
+        BtnBackgroundColor4 = GetColorFromShift(_idx4);
+        OnPropertyChanged(nameof(BtnBackgroundColor4));
 
         ToggleAlarmCommand = new AsyncRelayCommand(ToggleAlarmAsync);
         NavigateToAlarmCommand = new RelayCommand(NavigateToAlarm);
-        ToggleShift1Command = new RelayCommand(ToggleShift1);
+        ToggleShift2Command = new RelayCommand(ToggleShift2);
+        ToggleShift4Command = new RelayCommand(ToggleShift4);
         //UpdateAlarmRingtoneCommand = new AsyncRelayCommand(UpdateAlarmRingtoneAsync);
 
         App.Current.Dispatcher.StartTimer(TimeSpan.FromSeconds(1), () =>
@@ -71,8 +77,9 @@ public class MainViewModel : ObservableObject, IDisposable
 
     public ICommand NavigateToAlarmCommand { get; }
 
-    //public ICommand UpdateAlarmRingtoneCommand { get; }
-    public ICommand ToggleShift1Command { get; }
+    public ICommand ToggleShift2Command { get; }
+
+    public ICommand ToggleShift4Command { get; }
 
     public TimeSpan AlarmTime
     {
@@ -83,9 +90,13 @@ public class MainViewModel : ObservableObject, IDisposable
     public List<string> Shifts => new() { "白班", "中班", "夜班", "休息" };
     public string[] ShiftArray => Shifts.ToArray();
 
-    private int _idx1 = 3;
-    public string SelectShift1 => ShiftArray[_idx1];
-    public Color BtnBackgroundColor1 { get; set; } = Color.FromArgb("#FF92A1B0");
+    private int _idx2 = 3;
+    public string SelectShift2 => ShiftArray[_idx2];
+    public Color BtnBackgroundColor2 { get; set; } = Color.FromArgb("#FF92A1B0");
+
+    private int _idx4 = 3;
+    public string SelectShift4 => ShiftArray[_idx4];
+    public Color BtnBackgroundColor4 { get; set; } = Color.FromArgb("#FF92A1B0");
 
     public void Dispose()
     {
@@ -99,7 +110,7 @@ public class MainViewModel : ObservableObject, IDisposable
         {
             _alarmService.IsEnabledChanged -= AlarmService_IsEnabledChanged;
             _alarmService.ScheduledTimeChanged -= AlarmService_ScheduledTimeChanged;
-            _alarmService.Shift1Changed -= AlarmService_Shift1Changed;
+            _alarmService.ShiftChanged -= AlarmService_ShiftChanged;
             _alarmService.IsEnabledChangedWeek -= AlarmService_IsEnableChangedWeek;
 
             App.Current.PropertyChanged -= App_PropertyChanged;
@@ -194,24 +205,49 @@ public class MainViewModel : ObservableObject, IDisposable
         return nextOccurence;
     }
 
-    private void ToggleShift1()
+    private void ToggleShift2()
     {
-        if(_idx1 < (ShiftArray.Length-1))
+        if(_idx2 < (ShiftArray.Length-1))
         {
-            _idx1++;
+            _idx2++;
         }
         else
         {
-            _idx1 = 0;
+            _idx2 = 0;
         }
-        _alarmService.SetShifti(_idx1, 3);
+        _alarmService.SetShifti(_idx2, 2);
     }
 
-    private void AlarmService_Shift1Changed(object? sender, EventArgs e)
+    private void ToggleShift4()
     {
-        OnPropertyChanged(nameof(SelectShift1));
-        BtnBackgroundColor1 = GetColorFromShift(_alarmService.GetShifti(3));
-        OnPropertyChanged(nameof(BtnBackgroundColor1));
+        if (_idx4 < (ShiftArray.Length - 1))
+        {
+            _idx4++;
+        }
+        else
+        {
+            _idx4 = 0;
+        }
+        _alarmService.SetShifti(_idx4, 4);
+    }
+
+    private void AlarmService_ShiftChanged(object? sender, byte e)
+    {
+        switch (e)
+        {
+            case 2:
+                OnPropertyChanged(nameof(SelectShift2));
+                BtnBackgroundColor2 = GetColorFromShift(_alarmService.GetShifti(2));
+                OnPropertyChanged(nameof(BtnBackgroundColor2));
+                break;
+            case 4:
+                OnPropertyChanged(nameof(SelectShift4));
+                BtnBackgroundColor4 = GetColorFromShift(_alarmService.GetShifti(4));
+                OnPropertyChanged(nameof(BtnBackgroundColor4));
+                break;
+            default:
+                break;
+        }
     }
 
     private Color GetColorFromShift(int shift)

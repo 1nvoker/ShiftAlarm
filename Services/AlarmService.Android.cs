@@ -293,6 +293,6 @@ public partial class AlarmService
             Preferences.Default.Set($"shift{dow}", idx);
             SetAlarmShift(idx, dow);
         }
-        Shift1Changed?.Invoke(this, EventArgs.Empty);
+        ShiftChanged?.Invoke(this, (byte)dow);
     }
 }
