@@ -8,7 +8,9 @@ public partial class AlarmService
 
     public event EventHandler? IsEnabledChanged;
 
-    //public event EventHandler? RingtoneChanged;
+    public event EventHandler? Shift1Changed;
+
+    public event EventHandler<byte>? IsEnabledChangedWeek;
 
     public partial void SetAlarm(TimeSpan startTime);
 
@@ -24,6 +26,8 @@ public partial class AlarmService
 
     public partial TimeSpan? GetScheduledTime();
 
+    public partial long GetScheduledTimeShifti(int dow);
+
     protected virtual void OnScheduledTimeChanged(object sender, EventArgs e)
     {
         ScheduledTimeChanged?.Invoke(sender, e);
@@ -34,4 +38,7 @@ public partial class AlarmService
         IsEnabledChanged?.Invoke(sender, e);
     }
 
+    public partial int GetShifti(int dow);
+
+    public partial void SetShifti(int idx, int dow);
 }

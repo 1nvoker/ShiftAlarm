@@ -66,8 +66,6 @@ namespace MauiCatAlarm.ViewModels
         {
             if (disposing)
             {
-                //_shiftSetService.IsEnabledChanged -= AlarmService_IsEnabledChanged;
-                //_shiftSetService.ScheduledTimeChanged -= AlarmService_ScheduledTimeChanged;
                 App.Current.PropertyChanged -= App_PropertyChanged;
             }
         }
@@ -82,8 +80,7 @@ namespace MauiCatAlarm.ViewModels
         {
             if (e.PropertyName == nameof(App.IsAlarmActive))
             {
-                //IsAlarmOngoing = App.Current.IsAlarmActive;
-                //OnPropertyChanged(nameof(IsAlarmOngoing));
+
             }
         }
 

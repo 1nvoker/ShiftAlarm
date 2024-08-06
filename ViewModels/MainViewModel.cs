@@ -22,11 +22,20 @@ public class MainViewModel : ObservableObject, IDisposable
 
         _alarmService.IsEnabledChanged += AlarmService_IsEnabledChanged;
         _alarmService.ScheduledTimeChanged += AlarmService_ScheduledTimeChanged;
+        _alarmService.Shift1Changed += AlarmService_Shift1Changed;
+        _alarmService.IsEnabledChangedWeek += AlarmService_IsEnableChangedWeek;
+
         App.Current.PropertyChanged += App_PropertyChanged;
 
         AlarmTime = _alarmService.GetScheduledTime() ?? new TimeSpan(9, 0, 0);
+        _idx1 = _alarmService.GetShifti(3);
+        OnPropertyChanged(nameof(SelectShift1));
+        BtnBackgroundColor1 = GetColorFromShift(_idx1);
+        OnPropertyChanged(nameof(BtnBackgroundColor1));
+
         ToggleAlarmCommand = new AsyncRelayCommand(ToggleAlarmAsync);
         NavigateToAlarmCommand = new RelayCommand(NavigateToAlarm);
+        ToggleShift1Command = new RelayCommand(ToggleShift1);
         //UpdateAlarmRingtoneCommand = new AsyncRelayCommand(UpdateAlarmRingtoneAsync);
 
         App.Current.Dispatcher.StartTimer(TimeSpan.FromSeconds(1), () =>
@@ -63,6 +72,7 @@ public class MainViewModel : ObservableObject, IDisposable
     public ICommand NavigateToAlarmCommand { get; }
 
     //public ICommand UpdateAlarmRingtoneCommand { get; }
+    public ICommand ToggleShift1Command { get; }
 
     public TimeSpan AlarmTime
     {
@@ -70,17 +80,12 @@ public class MainViewModel : ObservableObject, IDisposable
         set => SetProperty(ref _alarmTime, value);
     }
 
-    public List<string> Shifts
-    {
-        get => new List<string>() { "白班", "中班", "夜班", "休息"};
-    }
+    public List<string> Shifts => new() { "白班", "中班", "夜班", "休息" };
+    public string[] ShiftArray => Shifts.ToArray();
 
-    private string _selectShift1 = "休息";
-    public string SelectShift1
-    {
-        get => _selectShift1;
-        set => SetProperty(ref _selectShift1, value);
-    }
+    private int _idx1 = 3;
+    public string SelectShift1 => ShiftArray[_idx1];
+    public Color BtnBackgroundColor1 { get; set; } = Color.FromArgb("#FF92A1B0");
 
     public void Dispose()
     {
@@ -94,6 +99,9 @@ public class MainViewModel : ObservableObject, IDisposable
         {
             _alarmService.IsEnabledChanged -= AlarmService_IsEnabledChanged;
             _alarmService.ScheduledTimeChanged -= AlarmService_ScheduledTimeChanged;
+            _alarmService.Shift1Changed -= AlarmService_Shift1Changed;
+            _alarmService.IsEnabledChangedWeek -= AlarmService_IsEnableChangedWeek;
+
             App.Current.PropertyChanged -= App_PropertyChanged;
         }
     }
@@ -186,4 +194,49 @@ public class MainViewModel : ObservableObject, IDisposable
         return nextOccurence;
     }
 
+    private void ToggleShift1()
+    {
+        if(_idx1 < (ShiftArray.Length-1))
+        {
+            _idx1++;
+        }
+        else
+        {
+            _idx1 = 0;
+        }
+        _alarmService.SetShifti(_idx1, 3);
+    }
+
+    private void AlarmService_Shift1Changed(object? sender, EventArgs e)
+    {
+        OnPropertyChanged(nameof(SelectShift1));
+        BtnBackgroundColor1 = GetColorFromShift(_alarmService.GetShifti(3));
+        OnPropertyChanged(nameof(BtnBackgroundColor1));
+    }
+
+    private Color GetColorFromShift(int shift)
+    {
+        Color ret;
+        switch (shift)
+        {
+            case 0:
+                ret = Color.FromArgb("#FFC1F7F6");
+                break;
+            case 1:
+                ret = Color.FromArgb("#FFF8A313");
+                break;
+            case 2:
+                ret = Color.FromArgb("#FF419EF8");
+                break;
+            default:
+                ret = Color.FromArgb("#FF92A1B0");
+                break;
+        }
+        return ret;
+    }
+
+    private void AlarmService_IsEnableChangedWeek(object? sender, byte e)
+    {
+
+    }
 }

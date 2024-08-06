@@ -4,8 +4,6 @@ public partial class ShiftSetService
 {
     public const int RingtonePickerRequestCode = 8008;
 
-    public event EventHandler? ScheduledTimeChanged;
-
     public event EventHandler? RingtoneChanged;
 
     public partial TimeSpan? GetScheduledTimeDay();
@@ -29,11 +27,6 @@ public partial class ShiftSetService
     public partial string GetAlarmRingtoneName();
 
     public partial string? GetAlarmRingtone();
-
-    protected virtual void OnScheduledTimeChanged(object sender, EventArgs e)
-    {
-        ScheduledTimeChanged?.Invoke(sender, e);
-    }
 
     protected virtual void OnRingtoneChanged(object sender, EventArgs e)
     {
