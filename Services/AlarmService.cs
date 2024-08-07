@@ -22,7 +22,7 @@ public partial class AlarmService
 
     public partial void DismissAlarm();
 
-    public partial void EnsureAlarmIsSetIfEnabled();
+    public partial Task EnsureAlarmIsSetIfEnabled();
 
     public partial TimeSpan? GetScheduledTime();
 

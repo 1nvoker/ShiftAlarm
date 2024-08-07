@@ -65,7 +65,7 @@ public class ActiveAlarmService : Service
         var notification = new NotificationCompat.Builder(context, MainApplication.ChannelId)
             .SetSmallIcon(Resource.Drawable.ic_clock_black_24dp)
             .SetContentTitle("起床啦!")
-            .SetContentText("今天是白班。保持好心情，工作加油吖~")
+            .SetContentText("保持好心情，扬帆起航~")
             .SetPriority(NotificationCompat.PriorityHigh)
             .SetCategory(NotificationCompat.CategoryAlarm)
             .SetContentIntent(pendingIntent)

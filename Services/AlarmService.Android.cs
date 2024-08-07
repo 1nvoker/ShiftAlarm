@@ -49,8 +49,27 @@ public partial class AlarmService
         return (GetShifti(dow) >= 0) && (GetShifti(dow) < 3) && (GetScheduledTimeShifti(dow) > 0);
     }
 
-    public partial void EnsureAlarmIsSetIfEnabled()
+    public partial async Task EnsureAlarmIsSetIfEnabled()
     {
+        var status = await Permissions.CheckStatusAsync<ScheduleExactAlarmPermission>();
+        if (status != PermissionStatus.Granted)
+        {
+            Log.Info("AlarmService", $"CheckStatusAsync status is {status}");
+            status = await Permissions.RequestAsync<ScheduleExactAlarmPermission>();
+            if (status != PermissionStatus.Granted)
+            {
+                Log.Info("AlarmService", $"RequestAsync status is {status}");
+                if (App.Current.MainPage != null)
+                {
+                    await App.Current.MainPage.DisplayAlert(
+                        "需要权限",
+                        "一个没有权限设置闹钟的闹钟应用可太悲哀了.",
+                        "好的");
+                }
+                return;
+            }
+        }
+
         if (IsEnabled() && !IsSet())
         {
             var scheduledTime = GetScheduledTime()
@@ -71,21 +90,23 @@ public partial class AlarmService
             }
         }
 
-        int dow = 3;
-        if (IsEnableShifti(dow))
+        for (int i = 0; i < 7; i++)
         {
-            if (IsSetShifti(dow))
+            if (IsEnableShifti(i))
             {
-                Log.Info("AlarmService", $"shift{dow} is already set");
+                if (IsSetShifti(i))
+                {
+                    Log.Info("AlarmService", $"shift{i} is already set");
+                }
+                else
+                {
+                    SetAlarmShift(GetShifti(i), i);
+                }
             }
             else
             {
-                SetAlarmShift(GetShifti(dow), dow);
+                Log.Info("AlarmService", $"shift{i} is disabled");
             }
-        }
-        else
-        {
-            Log.Info("AlarmService", $"shift{dow} is disabled");
         }
     }
 
@@ -172,7 +193,7 @@ public partial class AlarmService
     {
         var calendar = Calendar.Instance;
         calendar.TimeInMillis = Java.Lang.JavaSystem.CurrentTimeMillis();
-        calendar.Set(CalendarField.DayOfWeek, dow);
+        calendar.Set(CalendarField.DayOfWeek, dow+1);
         calendar.Set(CalendarField.HourOfDay, time.Hours);
         calendar.Set(CalendarField.Minute, time.Minutes);
         calendar.Set(CalendarField.Second, time.Seconds);
@@ -197,7 +218,7 @@ public partial class AlarmService
             calendar.Get(CalendarField.Second));
     }
 
-    private TimeSpan GetScheduledTimeDay()
+    private static TimeSpan GetScheduledTimeDay()
     {
         var storedValue = Preferences.Default.Get<string?>("start_time_day", null);
         Log.Info("GetScheduledTimeDay ", storedValue ?? "");
@@ -207,7 +228,7 @@ public partial class AlarmService
         return new TimeSpan(7, 14, 0);
     }
 
-    private TimeSpan GetScheduledTimeMid()
+    private static TimeSpan GetScheduledTimeMid()
     {
         var storedValue = Preferences.Default.Get<string?>("start_time_mid", null);
         Log.Info("GetScheduledTimeMid ", storedValue ?? "");
@@ -217,7 +238,7 @@ public partial class AlarmService
         return new TimeSpan(15, 20, 0);
     }
 
-    private TimeSpan GetScheduledTimeNight()
+    private static TimeSpan GetScheduledTimeNight()
     {
         var storedValue = Preferences.Default.Get<string?>("start_time_night", null);
         Log.Info("GetScheduledTimeNight ", storedValue ?? "");

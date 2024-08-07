@@ -46,8 +46,20 @@
 
             <HorizontalStackLayout HorizontalOptions="CenterAndExpand"
                                        Spacing="100"
-                                       Padding="0">
+                                       Padding="5">
                 <Label Text="周一"
+                       VerticalOptions="Center"/>
+
+                <Button Text="{Binding SelectShift1}"
+                    Command="{Binding ToggleShift1Command}"
+                    BackgroundColor="{Binding BtnBackgroundColor1}"
+                        TextColor="#000000"/>
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout HorizontalOptions="CenterAndExpand"
+                                       Spacing="100"
+                                       Padding="5">
+                <Label Text="周二"
                        VerticalOptions="Center"/>
 
                 <Button Text="{Binding SelectShift2}"
@@ -55,11 +67,23 @@
                     BackgroundColor="{Binding BtnBackgroundColor2}"
                         TextColor="#000000"/>
             </HorizontalStackLayout>
+            
+            <HorizontalStackLayout HorizontalOptions="CenterAndExpand"
+                                       Spacing="100"
+                                       Padding="5">
+                <Label Text="周三"
+                       VerticalOptions="Center"/>
+
+                <Button Text="{Binding SelectShift3}"
+                    Command="{Binding ToggleShift3Command}"
+                    BackgroundColor="{Binding BtnBackgroundColor3}"
+                        TextColor="#000000"/>
+            </HorizontalStackLayout>
 
             <HorizontalStackLayout HorizontalOptions="CenterAndExpand"
                                        Spacing="100"
-                                       Padding="0">
-                <Label Text="周三"
+                                       Padding="5">
+                <Label Text="周四"
                        VerticalOptions="Center"/>
 
                 <Button Text="{Binding SelectShift4}"
@@ -67,6 +91,48 @@
                     BackgroundColor="{Binding BtnBackgroundColor4}"
                         TextColor="#000000"/>
             </HorizontalStackLayout>
+            
+            <HorizontalStackLayout HorizontalOptions="CenterAndExpand"
+                                       Spacing="100"
+                                       Padding="5">
+                <Label Text="周五"
+                       VerticalOptions="Center"/>
+
+                <Button Text="{Binding SelectShift5}"
+                    Command="{Binding ToggleShift5Command}"
+                    BackgroundColor="{Binding BtnBackgroundColor5}"
+                        TextColor="#000000"/>
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout HorizontalOptions="CenterAndExpand"
+                                       Spacing="100"
+                                       Padding="5">
+                <Label Text="周六"
+                       VerticalOptions="Center"/>
+
+                <Button Text="{Binding SelectShift6}"
+                    Command="{Binding ToggleShift6Command}"
+                    BackgroundColor="{Binding BtnBackgroundColor6}"
+                        TextColor="#000000"/>
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout HorizontalOptions="CenterAndExpand"
+                                       Spacing="100"
+                                       Padding="5">
+                <Label Text="周日"
+                       VerticalOptions="Center"/>
+
+                <Button Text="{Binding SelectShift0}"
+                    Command="{Binding ToggleShift0Command}"
+                    BackgroundColor="{Binding BtnBackgroundColor0}"
+                        TextColor="#000000"/>
+            </HorizontalStackLayout>
+            
+            <Label Text="献给至爱♥孙东晓♥:"
+                   Margin="0,50,0,0"
+                   />
+            <Label Text="{Binding LoveTalk}"
+                   />
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

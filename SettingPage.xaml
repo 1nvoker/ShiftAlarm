@@ -5,13 +5,11 @@
              x:Class="MauiCatAlarm.SettingPage"
              x:DataType="vm:SettingViewModel" BackgroundColor="#000000">
     <VerticalStackLayout>
-        <Label Text="献给至爱♥孙东晓♥:"/>
-        <Label Text="{Binding LoveTalk, StringFormat='{0}'}"/>
         <Label
                 Text="{Binding AlarmRingtoneName, StringFormat='铃声:{0}'}"
                 VerticalOptions="Center"
                 HorizontalOptions="Start"
-            Margin="0,50,0,0"
+            Margin="0,0,0,0"
                 />
         <Button
                 Text="更改铃声"

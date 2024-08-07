@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows.Input;
 
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -15,6 +16,41 @@ public class MainViewModel : ObservableObject, IDisposable
     private readonly Func<AlarmPage> _alarmPageFactory;
     private TimeSpan _alarmTime;
 
+    public static string[] ShiftArray => ["白班", "中班", "夜班", "休息"];
+
+    private readonly int[] _idxs = [3, 3, 3, 3, 3, 3, 3];
+    private readonly Color[] _btncolors =
+    [
+        Color.FromArgb("#FF92A1B0"),
+        Color.FromArgb("#FF92A1B0"),
+        Color.FromArgb("#FF92A1B0"),
+        Color.FromArgb("#FF92A1B0"),
+        Color.FromArgb("#FF92A1B0"),
+        Color.FromArgb("#FF92A1B0"),
+        Color.FromArgb("#FF92A1B0")
+    ];
+
+    public string SelectShift0 => ShiftArray[_idxs[0]];
+    public Color BtnBackgroundColor0 => _btncolors[0];
+
+    public string SelectShift1 => ShiftArray[_idxs[1]];
+    public Color BtnBackgroundColor1 => _btncolors[1];
+
+    public string SelectShift2 => ShiftArray[_idxs[2]];
+    public Color BtnBackgroundColor2 => _btncolors[2];
+
+    public string SelectShift3 => ShiftArray[_idxs[3]];
+    public Color BtnBackgroundColor3 => _btncolors[3];
+
+    public string SelectShift4 => ShiftArray[_idxs[4]];
+    public Color BtnBackgroundColor4 => _btncolors[4];
+
+    public string SelectShift5 => ShiftArray[_idxs[5]];
+    public Color BtnBackgroundColor5 => _btncolors[5];
+
+    public string SelectShift6 => ShiftArray[_idxs[6]];
+    public Color BtnBackgroundColor6 => _btncolors[6];
+
     public MainViewModel(AlarmService alarmService, Func<AlarmPage> alarmPageFactory)
     {
         _alarmService = alarmService;
@@ -28,21 +64,37 @@ public class MainViewModel : ObservableObject, IDisposable
         App.Current.PropertyChanged += App_PropertyChanged;
 
         AlarmTime = _alarmService.GetScheduledTime() ?? new TimeSpan(9, 0, 0);
-        _idx2 = _alarmService.GetShifti(2);
-        OnPropertyChanged(nameof(SelectShift2));
-        BtnBackgroundColor2 = GetColorFromShift(_idx2);
-        OnPropertyChanged(nameof(BtnBackgroundColor2));
 
-        _idx4 = _alarmService.GetShifti(4);
+        for (int i = 0; i < _idxs.Length; i++)
+        {
+            _idxs[i] = _alarmService.GetShifti(i);
+            _btncolors[i] = GetColorFromShift(_idxs[i]);
+        }
+        OnPropertyChanged(nameof(SelectShift0));
+        OnPropertyChanged(nameof(BtnBackgroundColor0));
+        OnPropertyChanged(nameof(SelectShift1));
+        OnPropertyChanged(nameof(BtnBackgroundColor1));
+        OnPropertyChanged(nameof(SelectShift2));
+        OnPropertyChanged(nameof(BtnBackgroundColor2));
+        OnPropertyChanged(nameof(SelectShift3));
+        OnPropertyChanged(nameof(BtnBackgroundColor3));
         OnPropertyChanged(nameof(SelectShift4));
-        BtnBackgroundColor4 = GetColorFromShift(_idx4);
         OnPropertyChanged(nameof(BtnBackgroundColor4));
+        OnPropertyChanged(nameof(SelectShift5));
+        OnPropertyChanged(nameof(BtnBackgroundColor5));
+        OnPropertyChanged(nameof(SelectShift6));
+        OnPropertyChanged(nameof(BtnBackgroundColor6));
+
+        ToggleShift0Command = new RelayCommand(ToggleShift0);
+        ToggleShift1Command = new RelayCommand(ToggleShift1);
+        ToggleShift2Command = new RelayCommand(ToggleShift2);
+        ToggleShift3Command = new RelayCommand(ToggleShift3);
+        ToggleShift4Command = new RelayCommand(ToggleShift4);
+        ToggleShift5Command = new RelayCommand(ToggleShift5);
+        ToggleShift6Command = new RelayCommand(ToggleShift6);
 
         ToggleAlarmCommand = new AsyncRelayCommand(ToggleAlarmAsync);
         NavigateToAlarmCommand = new RelayCommand(NavigateToAlarm);
-        ToggleShift2Command = new RelayCommand(ToggleShift2);
-        ToggleShift4Command = new RelayCommand(ToggleShift4);
-        //UpdateAlarmRingtoneCommand = new AsyncRelayCommand(UpdateAlarmRingtoneAsync);
 
         App.Current.Dispatcher.StartTimer(TimeSpan.FromSeconds(1), () =>
         {
@@ -77,26 +129,25 @@ public class MainViewModel : ObservableObject, IDisposable
 
     public ICommand NavigateToAlarmCommand { get; }
 
+    public ICommand ToggleShift0Command { get; }
+
+    public ICommand ToggleShift1Command { get; }
+
     public ICommand ToggleShift2Command { get; }
 
+    public ICommand ToggleShift3Command { get; }
+
     public ICommand ToggleShift4Command { get; }
+
+    public ICommand ToggleShift5Command { get; }
+
+    public ICommand ToggleShift6Command { get; }
 
     public TimeSpan AlarmTime
     {
         get => _alarmTime;
         set => SetProperty(ref _alarmTime, value);
     }
-
-    public List<string> Shifts => new() { "白班", "中班", "夜班", "休息" };
-    public string[] ShiftArray => Shifts.ToArray();
-
-    private int _idx2 = 3;
-    public string SelectShift2 => ShiftArray[_idx2];
-    public Color BtnBackgroundColor2 { get; set; } = Color.FromArgb("#FF92A1B0");
-
-    private int _idx4 = 3;
-    public string SelectShift4 => ShiftArray[_idx4];
-    public Color BtnBackgroundColor4 { get; set; } = Color.FromArgb("#FF92A1B0");
 
     public void Dispose()
     {
@@ -205,74 +256,145 @@ public class MainViewModel : ObservableObject, IDisposable
         return nextOccurence;
     }
 
-    private void ToggleShift2()
+    private void ToggleShifti(int dow)
     {
-        if(_idx2 < (ShiftArray.Length-1))
+        if((dow >=0) && (dow < _idxs.Length))
         {
-            _idx2++;
+            if (_idxs[dow] < (ShiftArray.Length - 1))
+            {
+                _idxs[dow]++;
+            }
+            else
+            {
+                _idxs[dow] = 0;
+            }
+            _alarmService.SetShifti(_idxs[dow], dow);
         }
         else
         {
-            _idx2 = 0;
+            //Debug.WriteLine($"ToggleShifti wrong dow : {dow}, out of range");
         }
-        _alarmService.SetShifti(_idx2, 2);
+    }
+
+    private void ToggleShift0()
+    {
+        ToggleShifti(0);
+    }
+
+    private void ToggleShift1()
+    {
+        ToggleShifti(1);
+    }
+
+    private void ToggleShift2()
+    {
+        ToggleShifti(2);
+    }
+
+    private void ToggleShift3()
+    {
+        ToggleShifti(3);
     }
 
     private void ToggleShift4()
     {
-        if (_idx4 < (ShiftArray.Length - 1))
+        ToggleShifti(4);
+    }
+
+    private void ToggleShift5()
+    {
+        ToggleShifti(5);
+    }
+
+    private void ToggleShift6()
+    {
+        ToggleShifti(6);
+    }
+
+    private static Color GetColorFromShift(int shift)
+    {
+        Color ret = shift switch
         {
-            _idx4++;
-        }
-        else
-        {
-            _idx4 = 0;
-        }
-        _alarmService.SetShifti(_idx4, 4);
+            0 => Color.FromArgb("#FFC1F7F6"),
+            1 => Color.FromArgb("#FFF8A313"),
+            2 => Color.FromArgb("#FF419EF8"),
+            _ => Color.FromArgb("#FF92A1B0"),
+        };
+        return ret;
     }
 
     private void AlarmService_ShiftChanged(object? sender, byte e)
     {
         switch (e)
         {
-            case 2:
-                OnPropertyChanged(nameof(SelectShift2));
-                BtnBackgroundColor2 = GetColorFromShift(_alarmService.GetShifti(2));
-                OnPropertyChanged(nameof(BtnBackgroundColor2));
-                break;
-            case 4:
-                OnPropertyChanged(nameof(SelectShift4));
-                BtnBackgroundColor4 = GetColorFromShift(_alarmService.GetShifti(4));
-                OnPropertyChanged(nameof(BtnBackgroundColor4));
-                break;
-            default:
-                break;
-        }
-    }
-
-    private Color GetColorFromShift(int shift)
-    {
-        Color ret;
-        switch (shift)
-        {
             case 0:
-                ret = Color.FromArgb("#FFC1F7F6");
+                _btncolors[0] = GetColorFromShift(_alarmService.GetShifti(0));
+                OnPropertyChanged(nameof(SelectShift0));
+                OnPropertyChanged(nameof(BtnBackgroundColor0));
                 break;
             case 1:
-                ret = Color.FromArgb("#FFF8A313");
+                _btncolors[1] = GetColorFromShift(_alarmService.GetShifti(1));
+                OnPropertyChanged(nameof(SelectShift1));
+                OnPropertyChanged(nameof(BtnBackgroundColor1));
                 break;
             case 2:
-                ret = Color.FromArgb("#FF419EF8");
+                _btncolors[2] = GetColorFromShift(_alarmService.GetShifti(2));
+                OnPropertyChanged(nameof(SelectShift2));
+                OnPropertyChanged(nameof(BtnBackgroundColor2));
+                break;
+            case 3:
+                _btncolors[3] = GetColorFromShift(_alarmService.GetShifti(3));
+                OnPropertyChanged(nameof(SelectShift3));
+                OnPropertyChanged(nameof(BtnBackgroundColor3));
+                break;
+            case 4:
+                _btncolors[4] = GetColorFromShift(_alarmService.GetShifti(4));
+                OnPropertyChanged(nameof(SelectShift4));
+                OnPropertyChanged(nameof(BtnBackgroundColor4));
+                break;
+            case 5:
+                _btncolors[5] = GetColorFromShift(_alarmService.GetShifti(5));
+                OnPropertyChanged(nameof(SelectShift5));
+                OnPropertyChanged(nameof(BtnBackgroundColor5));
+                break;
+            case 6:
+                _btncolors[6] = GetColorFromShift(_alarmService.GetShifti(6));
+                OnPropertyChanged(nameof(SelectShift6));
+                OnPropertyChanged(nameof(BtnBackgroundColor6));
                 break;
             default:
-                ret = Color.FromArgb("#FF92A1B0");
                 break;
         }
-        return ret;
     }
 
     private void AlarmService_IsEnableChangedWeek(object? sender, byte e)
     {
 
+    }
+
+    public string LoveTalk => GetLoveTalk();
+
+    private string[] _lovetalks = {
+            "不管我本人多么平庸，我总觉得对你的爱很美。--王小波",
+            "最好的爱情，就是可以快乐的做自己，还依然被爱着。--王小波",
+            "只要有想见的人，就不是孤身一人。--《夏目友人帐》",
+            "约着见一面，就能使见面的前后几天都沾着光,变成好日子。--钱钟书",
+            "深情不及久伴，厚爱无需多言。",
+            "我想成为一个温柔的人，因为曾被温柔的人那样对待过。——《夏目友人帐》",
+            "一切重要的事我都想好好珍惜。——《夏目友人帐》",
+            "正义一定会胜么？这是当然的吧，因为只有胜利的一方才是正义啊！--《海贼王》",
+            "只要能成为你的力量 我就算变成真正的怪物也在所不惜.--《海贼王》",
+            "只要有你在，我就会继续努力。--《侧耳倾听》",
+            "有了喜欢的人世界都会变得多姿多彩起来。--《四月是你的谎言》",
+            "我渴望自己能有保护你的力量。--《秒速五厘米》",
+            "我喜欢跟你待在一起消磨时间。--《马男波杰克》",
+            "去冒险吧，去看世界。只要记得回到我身边。",
+            "我是最无害的人啦,我唯一能忍心伤害的人就是我自己。--《爱在黎明破晓前》"
+            };
+    private string GetLoveTalk()
+    {
+        Random rd = new Random();
+        int n = rd.Next(_lovetalks.Length - 1);
+        return _lovetalks[n];
     }
 }
