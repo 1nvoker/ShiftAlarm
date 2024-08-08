@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.Input;
 
 using MauiCatAlarm.Platforms.Android;
 using MauiCatAlarm.Services;
+using static Android.InputMethodServices.Keyboard;
 
 namespace MauiCatAlarm.ViewModels;
 
@@ -14,11 +15,11 @@ public class MainViewModel : ObservableObject, IDisposable
 {
     private readonly AlarmService _alarmService;
     private readonly Func<AlarmPage> _alarmPageFactory;
-    private TimeSpan _alarmTime;
+    //private TimeSpan _alarmTime;
 
     public static string[] ShiftArray => ["白班", "中班", "夜班", "休息"];
 
-    private readonly int[] _idxs = [3, 3, 3, 3, 3, 3, 3];
+    private readonly int[] _shift = [3, 3, 3, 3, 3, 3, 3];
     private readonly Color[] _btncolors =
     [
         Color.FromArgb("#FF92A1B0"),
@@ -30,45 +31,60 @@ public class MainViewModel : ObservableObject, IDisposable
         Color.FromArgb("#FF92A1B0")
     ];
 
-    public string SelectShift0 => ShiftArray[_idxs[0]];
+    public string SelectShift0 => ShiftArray[_shift[0]];
     public Color BtnBackgroundColor0 => _btncolors[0];
 
-    public string SelectShift1 => ShiftArray[_idxs[1]];
+    public string SelectShift1 => ShiftArray[_shift[1]];
     public Color BtnBackgroundColor1 => _btncolors[1];
 
-    public string SelectShift2 => ShiftArray[_idxs[2]];
+    public string SelectShift2 => ShiftArray[_shift[2]];
     public Color BtnBackgroundColor2 => _btncolors[2];
 
-    public string SelectShift3 => ShiftArray[_idxs[3]];
+    public string SelectShift3 => ShiftArray[_shift[3]];
     public Color BtnBackgroundColor3 => _btncolors[3];
 
-    public string SelectShift4 => ShiftArray[_idxs[4]];
+    public string SelectShift4 => ShiftArray[_shift[4]];
     public Color BtnBackgroundColor4 => _btncolors[4];
 
-    public string SelectShift5 => ShiftArray[_idxs[5]];
+    public string SelectShift5 => ShiftArray[_shift[5]];
     public Color BtnBackgroundColor5 => _btncolors[5];
 
-    public string SelectShift6 => ShiftArray[_idxs[6]];
+    public string SelectShift6 => ShiftArray[_shift[6]];
     public Color BtnBackgroundColor6 => _btncolors[6];
+
+    private string _nextAlarmTime = DateTime.MinValue.ToString("f");
+    public string NextAlarmTime
+    {
+        get => _alarmService.GetNextAlarmTime();
+        set => SetProperty(ref _nextAlarmTime, value);
+    }
+
+    private bool _isShiftAlarmSet = false;
+    public bool IsShiftAlarmSet
+    {
+        get => !_alarmService.IsNoShiftAlarmSet();
+        set => SetProperty(ref _isShiftAlarmSet, value);
+    }
 
     public MainViewModel(AlarmService alarmService, Func<AlarmPage> alarmPageFactory)
     {
         _alarmService = alarmService;
         _alarmPageFactory = alarmPageFactory;
 
-        _alarmService.IsEnabledChanged += AlarmService_IsEnabledChanged;
-        _alarmService.ScheduledTimeChanged += AlarmService_ScheduledTimeChanged;
+        //_alarmService.IsEnabledChanged += AlarmService_IsEnabledChanged;
+        //_alarmService.ScheduledTimeChanged += AlarmService_ScheduledTimeChanged;
         _alarmService.ShiftChanged += AlarmService_ShiftChanged;
         _alarmService.IsEnabledChangedWeek += AlarmService_IsEnableChangedWeek;
 
         App.Current.PropertyChanged += App_PropertyChanged;
 
-        AlarmTime = _alarmService.GetScheduledTime() ?? new TimeSpan(9, 0, 0);
+        //AlarmTime = _alarmService.GetScheduledTime() ?? new TimeSpan(9, 0, 0);
 
-        for (int i = 0; i < _idxs.Length; i++)
+        for (int i = 0; i < _shift.Length; i++)
         {
-            _idxs[i] = _alarmService.GetShifti(i);
-            _btncolors[i] = GetColorFromShift(_idxs[i]);
+            _shift[i] = _alarmService.GetShifti((byte)i);
+            //Debug.WriteLine($"MainViewModel shift {i} = {_shift[i]}");
+            _btncolors[i] = GetColorFromShift(_shift[i]);
         }
         OnPropertyChanged(nameof(SelectShift0));
         OnPropertyChanged(nameof(BtnBackgroundColor0));
@@ -85,6 +101,12 @@ public class MainViewModel : ObservableObject, IDisposable
         OnPropertyChanged(nameof(SelectShift6));
         OnPropertyChanged(nameof(BtnBackgroundColor6));
 
+        NextAlarmTime = _alarmService.GetNextAlarmTime();
+        //Debug.WriteLine($"NextAlarmTime is {NextAlarmTime}");
+        OnPropertyChanged(nameof(NextAlarmTime));
+        IsShiftAlarmSet = !_alarmService.IsNoShiftAlarmSet();
+        OnPropertyChanged(nameof(IsShiftAlarmSet));
+
         ToggleShift0Command = new RelayCommand(ToggleShift0);
         ToggleShift1Command = new RelayCommand(ToggleShift1);
         ToggleShift2Command = new RelayCommand(ToggleShift2);
@@ -93,7 +115,6 @@ public class MainViewModel : ObservableObject, IDisposable
         ToggleShift5Command = new RelayCommand(ToggleShift5);
         ToggleShift6Command = new RelayCommand(ToggleShift6);
 
-        ToggleAlarmCommand = new AsyncRelayCommand(ToggleAlarmAsync);
         NavigateToAlarmCommand = new RelayCommand(NavigateToAlarm);
 
         App.Current.Dispatcher.StartTimer(TimeSpan.FromSeconds(1), () =>
@@ -102,7 +123,6 @@ public class MainViewModel : ObservableObject, IDisposable
             OnPropertyChanged(nameof(CurrentWeekday));
             OnPropertyChanged(nameof(CurrentMonth));
             OnPropertyChanged(nameof(CurrentDayNumber));
-            OnPropertyChanged(nameof(EnabledAlarmLabel));
             return true;
         });
     }
@@ -115,17 +135,9 @@ public class MainViewModel : ObservableObject, IDisposable
 
     public string CurrentDayNumber => DateTime.Now.ToString("dd");
 
-    public string ToggleAlarmText => IsAlarmSet ? "禁用闹钟" : "启用闹钟";
-
-    public string EnabledAlarmLabel => FormatAlarmText();
-
-    public bool IsAlarmSet => _alarmService.IsSet();
-
-    public bool IsAlarmUnset => !IsAlarmSet;
+    //public bool IsAlarmSet => _alarmService.IsSet();
 
     public bool IsAlarmOngoing { get; private set; }
-
-    public ICommand ToggleAlarmCommand { get; }
 
     public ICommand NavigateToAlarmCommand { get; }
 
@@ -143,11 +155,11 @@ public class MainViewModel : ObservableObject, IDisposable
 
     public ICommand ToggleShift6Command { get; }
 
-    public TimeSpan AlarmTime
-    {
-        get => _alarmTime;
-        set => SetProperty(ref _alarmTime, value);
-    }
+    //public TimeSpan AlarmTime
+    //{
+    //    get => _alarmTime;
+    //    set => SetProperty(ref _alarmTime, value);
+    //}
 
     public void Dispose()
     {
@@ -159,8 +171,8 @@ public class MainViewModel : ObservableObject, IDisposable
     {
         if (disposing)
         {
-            _alarmService.IsEnabledChanged -= AlarmService_IsEnabledChanged;
-            _alarmService.ScheduledTimeChanged -= AlarmService_ScheduledTimeChanged;
+            //_alarmService.IsEnabledChanged -= AlarmService_IsEnabledChanged;
+            //_alarmService.ScheduledTimeChanged -= AlarmService_ScheduledTimeChanged;
             _alarmService.ShiftChanged -= AlarmService_ShiftChanged;
             _alarmService.IsEnabledChangedWeek -= AlarmService_IsEnableChangedWeek;
 
@@ -168,34 +180,34 @@ public class MainViewModel : ObservableObject, IDisposable
         }
     }
 
-    protected virtual async Task ToggleAlarmAsync()
-    {
-        var status = await Permissions.CheckStatusAsync<PostNotificationsPermission>();
-        if (status != PermissionStatus.Granted)
-        {
-            status = await Permissions.RequestAsync<PostNotificationsPermission>();
-            if (status != PermissionStatus.Granted)
-            {
-                if (App.Current.MainPage != null)
-                {
-                    await App.Current.MainPage.DisplayAlert(
-                        "需要权限",
-                        "一个没有权限显示闹钟的闹钟应用可太悲哀了.",
-                        "好的");
-                }
-                return;
-            }
-        }
+    //protected virtual async Task ToggleAlarmAsync()
+    //{
+    //    var status = await Permissions.CheckStatusAsync<PostNotificationsPermission>();
+    //    if (status != PermissionStatus.Granted)
+    //    {
+    //        status = await Permissions.RequestAsync<PostNotificationsPermission>();
+    //        if (status != PermissionStatus.Granted)
+    //        {
+    //            if (App.Current.MainPage != null)
+    //            {
+    //                await App.Current.MainPage.DisplayAlert(
+    //                    "需要权限",
+    //                    "一个没有权限显示闹钟的闹钟应用可太悲哀了.",
+    //                    "好的");
+    //            }
+    //            return;
+    //        }
+    //    }
 
-        if (_alarmService.IsSet())
-        {
-            _alarmService.DeleteAlarm();
-        }
-        else
-        {
-            _alarmService.SetAlarm(AlarmTime);
-        }
-    }
+    //    if (_alarmService.IsSet())
+    //    {
+    //        _alarmService.DeleteAlarm();
+    //    }
+    //    else
+    //    {
+    //        _alarmService.SetAlarm(AlarmTime);
+    //    }
+    //}
 
     protected virtual void NavigateToAlarm()
     {
@@ -205,14 +217,12 @@ public class MainViewModel : ObservableObject, IDisposable
 
     private void AlarmService_ScheduledTimeChanged(object? sender, EventArgs e)
     {
-        OnPropertyChanged(nameof(EnabledAlarmLabel));
+
     }
 
     private void AlarmService_IsEnabledChanged(object? sender, EventArgs e)
     {
-        OnPropertyChanged(nameof(IsAlarmSet));
-        OnPropertyChanged(nameof(IsAlarmUnset));
-        OnPropertyChanged(nameof(ToggleAlarmText));
+        //OnPropertyChanged(nameof(IsAlarmSet));
     }
 
     private void App_PropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -224,51 +234,51 @@ public class MainViewModel : ObservableObject, IDisposable
         }
     }
 
-    private string FormatAlarmText()
+    //private string FormatAlarmText()
+    //{
+    //    var nextOccurrence = NextAlarm();
+    //    if (nextOccurrence == null)
+    //    {
+    //        return $"Zzzzzzzz…";
+    //    }
+
+    //    if (nextOccurrence.Value.Date > DateTime.Today)
+    //    {
+    //        return $"将于明天 {nextOccurrence.Value:t} 醒来.";
+    //    }
+
+    //    return $"将于 {nextOccurrence.Value:t} 醒来.";
+    //}
+
+    //private DateTime? NextAlarm()
+    //{
+    //    var scheduledTime = _alarmService.GetScheduledTime();
+    //    if (scheduledTime == null)
+    //        return null;
+
+    //    var nextOccurence = DateTime.Today
+    //        .AddHours(scheduledTime.Value.Hours)
+    //        .AddMinutes(scheduledTime.Value.Minutes);
+
+    //    if (nextOccurence < DateTime.Now)
+    //        nextOccurence = nextOccurence.AddDays(1);
+
+    //    return nextOccurence;
+    //}
+
+    private void ToggleShifti(byte dow)
     {
-        var nextOccurrence = NextAlarm();
-        if (nextOccurrence == null)
+        if ((dow >= 0) && (dow < _shift.Length))
         {
-            return $"Zzzzzzzz…";
-        }
-
-        if (nextOccurrence.Value.Date > DateTime.Today)
-        {
-            return $"将于明天 {nextOccurrence.Value:t} 醒来.";
-        }
-
-        return $"将于 {nextOccurrence.Value:t} 醒来.";
-    }
-
-    private DateTime? NextAlarm()
-    {
-        var scheduledTime = _alarmService.GetScheduledTime();
-        if (scheduledTime == null)
-            return null;
-
-        var nextOccurence = DateTime.Today
-            .AddHours(scheduledTime.Value.Hours)
-            .AddMinutes(scheduledTime.Value.Minutes);
-
-        if (nextOccurence < DateTime.Now)
-            nextOccurence = nextOccurence.AddDays(1);
-
-        return nextOccurence;
-    }
-
-    private void ToggleShifti(int dow)
-    {
-        if((dow >=0) && (dow < _idxs.Length))
-        {
-            if (_idxs[dow] < (ShiftArray.Length - 1))
+            if (_shift[dow] < (ShiftArray.Length - 1))
             {
-                _idxs[dow]++;
+                _shift[dow]++;
             }
             else
             {
-                _idxs[dow] = 0;
+                _shift[dow] = 0;
             }
-            _alarmService.SetShifti(_idxs[dow], dow);
+            _alarmService.SetShifti((byte)_shift[(int)dow], dow);
         }
         else
         {
@@ -331,36 +341,43 @@ public class MainViewModel : ObservableObject, IDisposable
                 _btncolors[0] = GetColorFromShift(_alarmService.GetShifti(0));
                 OnPropertyChanged(nameof(SelectShift0));
                 OnPropertyChanged(nameof(BtnBackgroundColor0));
+                OnPropertyChanged(nameof(NextAlarmTime));
                 break;
             case 1:
                 _btncolors[1] = GetColorFromShift(_alarmService.GetShifti(1));
                 OnPropertyChanged(nameof(SelectShift1));
                 OnPropertyChanged(nameof(BtnBackgroundColor1));
+                OnPropertyChanged(nameof(NextAlarmTime));
                 break;
             case 2:
                 _btncolors[2] = GetColorFromShift(_alarmService.GetShifti(2));
                 OnPropertyChanged(nameof(SelectShift2));
                 OnPropertyChanged(nameof(BtnBackgroundColor2));
+                OnPropertyChanged(nameof(NextAlarmTime));
                 break;
             case 3:
                 _btncolors[3] = GetColorFromShift(_alarmService.GetShifti(3));
                 OnPropertyChanged(nameof(SelectShift3));
                 OnPropertyChanged(nameof(BtnBackgroundColor3));
+                OnPropertyChanged(nameof(NextAlarmTime));
                 break;
             case 4:
                 _btncolors[4] = GetColorFromShift(_alarmService.GetShifti(4));
                 OnPropertyChanged(nameof(SelectShift4));
                 OnPropertyChanged(nameof(BtnBackgroundColor4));
+                OnPropertyChanged(nameof(NextAlarmTime));
                 break;
             case 5:
                 _btncolors[5] = GetColorFromShift(_alarmService.GetShifti(5));
                 OnPropertyChanged(nameof(SelectShift5));
                 OnPropertyChanged(nameof(BtnBackgroundColor5));
+                OnPropertyChanged(nameof(NextAlarmTime));
                 break;
             case 6:
                 _btncolors[6] = GetColorFromShift(_alarmService.GetShifti(6));
                 OnPropertyChanged(nameof(SelectShift6));
                 OnPropertyChanged(nameof(BtnBackgroundColor6));
+                OnPropertyChanged(nameof(NextAlarmTime));
                 break;
             default:
                 break;
@@ -369,12 +386,13 @@ public class MainViewModel : ObservableObject, IDisposable
 
     private void AlarmService_IsEnableChangedWeek(object? sender, byte e)
     {
-
+        OnPropertyChanged(nameof(IsShiftAlarmSet));
+        OnPropertyChanged(nameof(NextAlarmTime));
     }
 
     public string LoveTalk => GetLoveTalk();
 
-    private string[] _lovetalks = {
+    private readonly string[] _lovetalks = [
             "不管我本人多么平庸，我总觉得对你的爱很美。--王小波",
             "最好的爱情，就是可以快乐的做自己，还依然被爱着。--王小波",
             "只要有想见的人，就不是孤身一人。--《夏目友人帐》",
@@ -390,7 +408,7 @@ public class MainViewModel : ObservableObject, IDisposable
             "我喜欢跟你待在一起消磨时间。--《马男波杰克》",
             "去冒险吧，去看世界。只要记得回到我身边。",
             "我是最无害的人啦,我唯一能忍心伤害的人就是我自己。--《爱在黎明破晓前》"
-            };
+            ];
     private string GetLoveTalk()
     {
         Random rd = new Random();

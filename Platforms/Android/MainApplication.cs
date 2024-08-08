@@ -16,6 +16,7 @@ public class MainApplication : MauiApplication
     public MainApplication(IntPtr handle, JniHandleOwnership ownership)
         : base(handle, ownership)
     {
+
     }
 
     protected override MauiApp CreateMauiApp()
@@ -29,6 +30,7 @@ public class MainApplication : MauiApplication
 
         var channel = new NotificationChannel(ChannelId, "Alarms", NotificationImportance.High);
         channel.SetSound(null, null);
+        channel.SetVibrationPattern([0, 500, 500, 500]);
         channel.SetBypassDnd(true);
         var notificationManager = Context.GetSystemService(NotificationService).JavaCast<NotificationManager>();
         notificationManager!.CreateNotificationChannel(channel);

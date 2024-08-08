@@ -1,16 +1,17 @@
-﻿using System.Diagnostics;
-using System.Globalization;
+﻿//using System.Diagnostics;
+//using System.Globalization;
 
-using Android.App;
+//using Android.App;
 using Android.Content;
 using Android.Media;
-using Android.Runtime;
+//using Android.Runtime;
 using Android.Util;
+//using static Android.InputMethodServices.Keyboard;
 
-using Java.Util;
+//using Java.Util;
 
-using MauiCatAlarm.Platforms.Android;
-using MauiCatAlarm.Platforms.Android.Receivers;
+//using MauiCatAlarm.Platforms.Android;
+//using MauiCatAlarm.Platforms.Android.Receivers;
 
 namespace MauiCatAlarm.Services;
 
@@ -21,45 +22,61 @@ public partial class ShiftSetService
 
     }
 
-    public partial TimeSpan? GetScheduledTimeDay()
+    public partial TimeSpan GetScheduledTimeDay()
     {
-        var storedValue = Preferences.Default.Get<string?>("start_time_day", null);
-        Log.Warn("GetScheduledTimeDay ", storedValue??"");
-        if (TimeSpan.TryParseExact(storedValue, "hh\\:mm", CultureInfo.InvariantCulture, out var timeSpan))
-            return timeSpan;
-
-        return null;
+        return KvMannger.GetScheduledTimeDay();
     }
+
     public partial void SetScheduledTimeDay(TimeSpan startTime)
     {
-        Log.Warn("GetScheduledTimeDay ", startTime.ToString("hh\\:mm", CultureInfo.InvariantCulture));
-        Preferences.Default.Set("start_time_day", startTime.ToString("hh\\:mm", CultureInfo.InvariantCulture));
+        KvMannger.SetScheduledTimeDay(startTime);
+
+        for (byte i = 0; i < 7; i++)
+        {
+            if (KvMannger.GetShifti(i) == 0)
+            {
+                long st = KvMannger.SetAlarmFromShift(i, 0);
+                Log.Info("ShiftSetService", $"day shift{i} update for {KvMannger.ConvertFromMillis(st)}");
+            }
+        }
     }
 
-    public partial TimeSpan? GetScheduledTimeMid()
+    public partial TimeSpan GetScheduledTimeMid()
     {
-        var storedValue = Preferences.Default.Get<string?>("start_time_mid", null);
-        if (TimeSpan.TryParseExact(storedValue, "hh\\:mm", CultureInfo.InvariantCulture, out var timeSpan))
-            return timeSpan;
-
-        return null;
+        return KvMannger.GetScheduledTimeMid();
     }
+
     public partial void SetScheduledTimeMid(TimeSpan startTime)
     {
-        Preferences.Default.Set("start_time_mid", startTime.ToString("hh\\:mm", CultureInfo.InvariantCulture));
+        KvMannger.SetScheduledTimeMid(startTime);
+
+        for (byte i = 0; i < 7; i++)
+        {
+            if (KvMannger.GetShifti(i) == 1)
+            {
+                long st = KvMannger.SetAlarmFromShift(i, 1);
+                Log.Info("ShiftSetService", $"mid shift{i} update for {KvMannger.ConvertFromMillis(st)}");
+            }
+        }
     }
 
-    public partial TimeSpan? GetScheduledTimeNight()
+    public partial TimeSpan GetScheduledTimeNight()
     {
-        var storedValue = Preferences.Default.Get<string?>("start_time_night", null);
-        if (TimeSpan.TryParseExact(storedValue, "hh\\:mm", CultureInfo.InvariantCulture, out var timeSpan))
-            return timeSpan;
-
-        return null;
+        return KvMannger.GetScheduledTimeNight();
     }
+
     public partial void SetScheduledTimeNight(TimeSpan startTime)
     {
-        Preferences.Default.Set("start_time_night", startTime.ToString("hh\\:mm", CultureInfo.InvariantCulture));
+        KvMannger.SetScheduledTimeNight(startTime);
+
+        for (byte i = 0; i < 7; i++)
+        {
+            if (KvMannger.GetShifti(i) == 2)
+            {
+                long st = KvMannger.SetAlarmFromShift(i, 2);
+                Log.Info("ShiftSetService", $"night shift{i} update for {KvMannger.ConvertFromMillis(st)}");
+            }
+        }
     }
 
     public partial void PickAlarmRingtone()
@@ -89,25 +106,23 @@ public partial class ShiftSetService
 
     public partial void SetAlarmRingtone(string name, string filePath)
     {
-        Preferences.Default.Set("alarm_ringtone", filePath);
-        Preferences.Default.Set("alarm_ringtone_name", name);
+        KvMannger.SetAlarmRingtone(name, filePath);
         OnRingtoneChanged(this, EventArgs.Empty);
     }
 
     public partial void SetDefaultAlarmRingtone()
     {
-        Preferences.Default.Remove("alarm_ringtone");
-        Preferences.Default.Remove("alarm_ringtone_name");
+        KvMannger.SetDefaultAlarmRingtone();
         OnRingtoneChanged(this, EventArgs.Empty);
     }
 
     public partial string GetAlarmRingtoneName()
     {
-        return Preferences.Default.Get("alarm_ringtone_name", "Default");
+        return KvMannger.GetAlarmRingtoneName();
     }
 
     public partial string? GetAlarmRingtone()
     {
-        return Preferences.Default.Get<string?>("alarm_ringtone", null);
+        return KvMannger.GetAlarmRingtone();
     }
 }

@@ -1,9 +1,11 @@
-﻿using Android.App;
+﻿using Android;
+using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.Media;
+using Android.OS;
 using Android.Util;
-
+using AndroidX.Core.App;
 using MauiCatAlarm.Platforms.Android;
 using MauiCatAlarm.Services;
 
@@ -21,6 +23,47 @@ namespace MauiCatAlarm;
                            | ConfigChanges.Density)]
 public class MainActivity : MauiAppCompatActivity
 {
+    private readonly List<string> _permissions31 =
+        [
+            Manifest.Permission.ReceiveBootCompleted,
+            Manifest.Permission.ReadExternalStorage,
+            Manifest.Permission.Vibrate,
+            Manifest.Permission.WakeLock,
+            Manifest.Permission.SetAlarm,
+            Manifest.Permission.ForegroundService,
+            Manifest.Permission.UseFullScreenIntent,
+            Manifest.Permission.ScheduleExactAlarm,
+        ];
+
+    private readonly List<string> _permissions33 =
+        [
+            Manifest.Permission.ReadMediaAudio,
+            Manifest.Permission.UseExactAlarm,
+            Manifest.Permission.PostNotifications,
+        ];
+
+    private readonly List<string> _permissions34 =
+        [
+            Manifest.Permission.ForegroundServiceMediaPlayback,
+        ];
+    protected override void OnCreate(Bundle? savedInstanceState)
+    {
+        base.OnCreate(savedInstanceState);
+
+        if (OperatingSystem.IsAndroidVersionAtLeast(31))
+        {
+            ActivityCompat.RequestPermissions(this, _permissions31.ToArray(), 0);
+        }
+        if (OperatingSystem.IsAndroidVersionAtLeast(33))
+        {
+            ActivityCompat.RequestPermissions(this, _permissions33.ToArray(), 0);
+        }
+        if (OperatingSystem.IsAndroidVersionAtLeast(34))
+        {
+            ActivityCompat.RequestPermissions(this, _permissions34.ToArray(), 0);
+        }
+    }
+
     protected override void OnActivityResult(int requestCode, Result resultCode, Intent? data)
     {
         base.OnActivityResult(requestCode, resultCode, data);

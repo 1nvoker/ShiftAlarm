@@ -9,7 +9,9 @@
         <VerticalStackLayout>
             <HorizontalStackLayout HorizontalOptions="Start"
                                        Spacing="6"
-                                       Padding="0">
+                                       Padding="0"
+                                   Margin="0,0,0,40" >
+                
                 <Label Text="{Binding CurrentWeekday}"
                            Style="{StaticResource Subheading}"/>
                 <Label Text="{Binding CurrentMonth}"
@@ -27,23 +29,12 @@
                     IsVisible="{Binding IsAlarmOngoing}"
                     Command="{Binding NavigateToAlarmCommand}"
                     Style="{StaticResource DangerButton}"
-                    Margin="0,0,0,48" />
-
-            <!-- Show time picker when alarm is disabled -->
-            <Label Text="叫我起来:"
-                   IsVisible="{Binding IsAlarmUnset}" />
-            <TimePicker Time="{Binding AlarmTime}"
-                        Format="t"
-                        IsVisible="{Binding IsAlarmUnset}" />
+                    Margin="0,0,0,40" />
 
             <!-- Show a label with the next occurrence if the alarm is enabled -->
-            <Label Text="{Binding EnabledAlarmLabel}"
-                   IsVisible="{Binding IsAlarmSet}" />
-
-            <Button Text="{Binding ToggleAlarmText}"
-                    Command="{Binding ToggleAlarmCommand}"
-                    Style="{StaticResource PrimaryButton}" />
-
+            <Label Text="{Binding NextAlarmTime, StringFormat='下个闹钟:{0}'}"
+                   IsVisible="{Binding IsShiftAlarmSet}" />
+            
             <HorizontalStackLayout HorizontalOptions="CenterAndExpand"
                                        Spacing="100"
                                        Padding="5">
@@ -129,7 +120,7 @@
             </HorizontalStackLayout>
             
             <Label Text="献给至爱♥孙东晓♥:"
-                   Margin="0,50,0,0"
+                   Margin="0,20,0,0"
                    />
             <Label Text="{Binding LoveTalk}"
                    />

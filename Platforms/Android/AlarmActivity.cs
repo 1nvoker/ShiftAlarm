@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Android.App;
-using Android.Content;
+﻿using Android.App;
+//using Android.Content;
 using Android.Content.PM;
 using Android.OS;
-using Android.Runtime;
+//using Android.Runtime;
 using Android.Util;
 using Android.Views;
 
-using Microsoft.Maui.Platform;
+//using Microsoft.Maui.Platform;
 
 namespace MauiCatAlarm.Platforms.Android;
 
@@ -31,10 +25,10 @@ public class AlarmActivity : Activity
         Log.Info("AlarmActivity", "OnCreate");
         base.OnCreate(savedInstanceState);
 
-        Window.AddFlags(WindowManagerFlags.ShowWhenLocked);
-        Window.AddFlags(WindowManagerFlags.DismissKeyguard);
-        Window.AddFlags(WindowManagerFlags.KeepScreenOn);
-        Window.AddFlags(WindowManagerFlags.TurnScreenOn);
+        Window?.AddFlags(WindowManagerFlags.ShowWhenLocked);
+        Window?.AddFlags(WindowManagerFlags.DismissKeyguard);
+        Window?.AddFlags(WindowManagerFlags.KeepScreenOn);
+        Window?.AddFlags(WindowManagerFlags.TurnScreenOn);
 
         if (App.Current is not App app)
             throw new InvalidOperationException("Could not find App instance.");

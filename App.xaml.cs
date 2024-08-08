@@ -1,6 +1,7 @@
 ﻿using MauiCatAlarm.Services;
 
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 
 namespace MauiCatAlarm;
 
@@ -15,8 +16,10 @@ public partial class App : Application
 
         InitializeComponent();
 
-        MainPage = new AppShell();
+        //Debug.WriteLine("App start");
         alarmService.EnsureAlarmIsSetIfEnabled();
+
+        MainPage = new AppShell();
     }
 
     public static new App Current => (App)Application.Current!;

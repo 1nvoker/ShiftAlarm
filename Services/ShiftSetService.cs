@@ -6,15 +6,15 @@ public partial class ShiftSetService
 
     public event EventHandler? RingtoneChanged;
 
-    public partial TimeSpan? GetScheduledTimeDay();
+    public partial TimeSpan GetScheduledTimeDay();
 
     public partial void SetScheduledTimeDay(TimeSpan startTime);
 
-    public partial TimeSpan? GetScheduledTimeMid();
+    public partial TimeSpan GetScheduledTimeMid();
 
     public partial void SetScheduledTimeMid(TimeSpan startTime);
 
-    public partial TimeSpan? GetScheduledTimeNight();
+    public partial TimeSpan GetScheduledTimeNight();
 
     public partial void SetScheduledTimeNight(TimeSpan startTime);
 
@@ -23,7 +23,7 @@ public partial class ShiftSetService
     public partial void PickAlarmRingtone();
 
     public partial void SetDefaultAlarmRingtone();
-    
+
     public partial string GetAlarmRingtoneName();
 
     public partial string? GetAlarmRingtone();

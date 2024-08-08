@@ -8,7 +8,7 @@ using Android.Util;
 
 using AndroidX.Core.App;
 
-using GoogleGson;
+//using GoogleGson;
 
 namespace MauiCatAlarm.Platforms.Android;
 

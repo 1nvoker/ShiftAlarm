@@ -8,7 +8,7 @@ using CommunityToolkit.Mvvm.Input;
 
 //using MauiCatAlarm.Platforms.Android;
 using MauiCatAlarm.Services;
-using static Android.Resource;
+//using static Android.Resource;
 
 
 namespace MauiCatAlarm.ViewModels
@@ -51,13 +51,11 @@ namespace MauiCatAlarm.ViewModels
 
             _shiftSetService.RingtoneChanged += AlarmService_RingtoneChanged;
 
-            AlarmTimeDay = _shiftSetService.GetScheduledTimeDay() ?? new TimeSpan(7, 14, 0);
-            AlarmTimeMid = _shiftSetService.GetScheduledTimeMid() ?? new TimeSpan(15, 20, 0);
-            AlarmTimeNight = _shiftSetService.GetScheduledTimeNight() ?? new TimeSpan(23, 40, 0);
+            AlarmTimeDay = _shiftSetService.GetScheduledTimeDay();
+            AlarmTimeMid = _shiftSetService.GetScheduledTimeMid();
+            AlarmTimeNight = _shiftSetService.GetScheduledTimeNight();
 
             UpdateAlarmRingtoneCommand = new AsyncRelayCommand(UpdateAlarmRingtoneAsync);
-
-            Debug.WriteLine(string.Format("SettingViewModel {0}", AlarmTimeDay.ToString("hh\\:mm", CultureInfo.InvariantCulture)));
         }
 
         protected virtual void Dispose(bool disposing)

@@ -39,9 +39,8 @@ public static class MauiProgram
         });
         builder.Services.AddSingleton<AlarmService>();
         builder.Services.AddSingleton<ShiftSetService>();
-
 #if DEBUG
-		builder.Logging.AddDebug();
+        builder.Logging.AddDebug();
 #endif
 
         return builder.Build();
