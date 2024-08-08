@@ -35,7 +35,7 @@ public partial class ShiftSetService
         {
             if (KvMannger.GetShifti(i) == 0)
             {
-                long st = KvMannger.SetAlarmFromShift(i, 0);
+                long st = KvMannger.SetAlarmFromShift(i, 0, true);
                 Log.Info("ShiftSetService", $"day shift{i} update for {KvMannger.ConvertFromMillis(st)}");
             }
         }
@@ -54,7 +54,7 @@ public partial class ShiftSetService
         {
             if (KvMannger.GetShifti(i) == 1)
             {
-                long st = KvMannger.SetAlarmFromShift(i, 1);
+                long st = KvMannger.SetAlarmFromShift(i, 1, true);
                 Log.Info("ShiftSetService", $"mid shift{i} update for {KvMannger.ConvertFromMillis(st)}");
             }
         }
@@ -73,7 +73,7 @@ public partial class ShiftSetService
         {
             if (KvMannger.GetShifti(i) == 2)
             {
-                long st = KvMannger.SetAlarmFromShift(i, 2);
+                long st = KvMannger.SetAlarmFromShift(i, 2, true);
                 Log.Info("ShiftSetService", $"night shift{i} update for {KvMannger.ConvertFromMillis(st)}");
             }
         }

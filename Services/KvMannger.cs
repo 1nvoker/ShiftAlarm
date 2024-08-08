@@ -79,7 +79,7 @@ namespace MauiCatAlarm.Services
             return calendar.TimeInMillis;
         }
 
-        public static long SetAlarmFromShift(byte dow, byte shift)
+        public static long SetAlarmFromShift(byte dow, byte shift, bool doevent)
         {
             if ((dow >= 0) && (dow < 7) && (shift >= 0) && (shift < 3))
             {
@@ -100,7 +100,7 @@ namespace MauiCatAlarm.Services
                 }
 
                 long startTimeInMillis = ConvertToMillisWeek(timeSpan, dow);
-                SetScheduledTimeShifti(dow, startTimeInMillis);
+                SetScheduledTimeShifti(dow, startTimeInMillis, doevent);
                 return startTimeInMillis;
             }
 
@@ -122,10 +122,10 @@ namespace MauiCatAlarm.Services
             return Preferences.Default.Get<long>($"shift{dow}time", -123);
         }
 
-        public static void SetScheduledTimeShifti(byte dow, long startTimeInMillis)
+        public static void SetScheduledTimeShifti(byte dow, long startTimeInMillis, bool doevent)
         {
             Preferences.Default.Set($"shift{dow}time", startTimeInMillis);
-            if(startTimeInMillis > 0)
+            if(doevent && (startTimeInMillis > 0))
             {
                 ShiftAlarmChanged?.Invoke(null, dow);
             }

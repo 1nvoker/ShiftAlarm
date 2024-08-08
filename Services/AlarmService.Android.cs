@@ -56,44 +56,23 @@ public partial class AlarmService
 
     public partial void EnsureAlarmIsSetIfEnabled()
     {
-        //if (IsEnabled() && !IsSet())
-        //{
-        //    var scheduledTime = GetScheduledTime()
-        //        ?? throw new UnreachableException("IsEnabled guarantees a scheduled time is set, but GetScheduledTime returned null.");
-
-        //    Log.Info("AlarmService", $"Alarm is enabled and schedule for {scheduledTime} but no PendingIntent was found");
-        //    SetAlarm(scheduledTime);
-        //}
-        //else
-        //{
-        //    if (!IsEnabled())
-        //    {
-        //        Log.Info("AlarmService", "Alarm is disabled");
-        //    }
-        //    else if (IsSet())
-        //    {
-        //        Log.Info("AlarmService", "Alarm is already set");
-        //    }
-        //}
-
-        //Log.Info("AlarmService", "EnsureAlarmIsSetIfEnabled");
         for (byte i = 0; i < 7; i++)
         {
             if (KvMannger.IsEnableShiftiTime(i))
             {
                 if (IsSetShifti(i))
                 {
-                    //Log.Info("AlarmService", $"shift{i} is already set");
+                    Log.Info("AlarmService", $"shift{i} is already set");
                 }
                 else
                 {
-                    //Log.Info("AlarmService", $"SetAlarmShift");
+                    Log.Info("AlarmService", $"SetAlarmShift");
                     SetAlarmShift((byte)GetShifti(i), i);
                 }
             }
             else
             {
-                //Log.Info("AlarmService", $"shift{i} is disabled");
+                Log.Info("AlarmService", $"shift{i} is disabled");
             }
         }
     }
@@ -172,7 +151,7 @@ public partial class AlarmService
 
         var pendingIntent = GetPendingAlarmIntent(create: true, request: dow)!;
 
-        long startTimeInMillis = KvMannger.SetAlarmFromShift(dow, shift);
+        long startTimeInMillis = KvMannger.SetAlarmFromShift(dow, shift, false);
         _alarmManager.SetExactAndAllowWhileIdle(AlarmType.RtcWakeup, startTimeInMillis, pendingIntent);
         Log.Info("AlarmService", $"shift{dow} set for {KvMannger.ConvertFromMillis(startTimeInMillis)}");
 
@@ -210,6 +189,20 @@ public partial class AlarmService
     private void OnShiftAlarmChanged(object? sender, byte dow)
     {
         ShiftChanged?.Invoke(this, dow);
+        Log.Info("AlarmService", $"OnShiftAlarmChanged{dow} cancelled");
+
+        for (byte i = 0; i < 7; i++)
+        {
+            if (KvMannger.IsEnableShiftiTime(i))
+            {
+                Log.Info("AlarmService", $"OnShiftAlarmChanged shift{i} refresh");
+                SetAlarmShift((byte)GetShifti(i), i);
+            }
+            else
+            {
+                Log.Info("AlarmService", $"OnShiftAlarmChanged shift{i} is disabled");
+            }
+        }
     }
 
     //public async Task RequestandCheckPermission31()
