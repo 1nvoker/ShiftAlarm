@@ -19,7 +19,7 @@ public static class MauiProgram
             });
 
         builder.Services.AddTransient<MainViewModel>();
-        builder.Services.AddTransient<AlarmViewModel>();
+        //builder.Services.AddTransient<AlarmViewModel>();
         builder.Services.AddTransient<SettingViewModel>();
 
         builder.Services.AddTransient<MainPage>();
@@ -27,11 +27,11 @@ public static class MauiProgram
         {
             return () => provider.GetRequiredService<MainPage>();
         });
-        builder.Services.AddTransient<AlarmPage>();
-        builder.Services.AddTransient<Func<AlarmPage>>(provider =>
-        {
-            return () => provider.GetRequiredService<AlarmPage>();
-        });
+        //builder.Services.AddTransient<AlarmPage>();
+        //builder.Services.AddTransient<Func<AlarmPage>>(provider =>
+        //{
+        //    return () => provider.GetRequiredService<AlarmPage>();
+        //});
         builder.Services.AddTransient<SettingPage>();
         builder.Services.AddTransient<Func<SettingPage>>(provider =>
         {

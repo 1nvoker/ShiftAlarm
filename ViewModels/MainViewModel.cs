@@ -14,7 +14,7 @@ namespace MauiCatAlarm.ViewModels;
 public class MainViewModel : ObservableObject, IDisposable
 {
     private readonly AlarmService _alarmService;
-    private readonly Func<AlarmPage> _alarmPageFactory;
+    //private readonly Func<AlarmPage> _alarmPageFactory;
     //private TimeSpan _alarmTime;
 
     public static string[] ShiftArray => ["白班", "中班", "夜班", "休息"];
@@ -66,15 +66,17 @@ public class MainViewModel : ObservableObject, IDisposable
         set => SetProperty(ref _isShiftAlarmSet, value);
     }
 
-    public MainViewModel(AlarmService alarmService, Func<AlarmPage> alarmPageFactory)
+    public MainViewModel(AlarmService alarmService)
     {
         _alarmService = alarmService;
-        _alarmPageFactory = alarmPageFactory;
+        //_alarmPageFactory = alarmPageFactory;
 
         //_alarmService.IsEnabledChanged += AlarmService_IsEnabledChanged;
         //_alarmService.ScheduledTimeChanged += AlarmService_ScheduledTimeChanged;
         _alarmService.ShiftChanged += AlarmService_ShiftChanged;
         _alarmService.IsEnabledChangedWeek += AlarmService_IsEnableChangedWeek;
+
+        IsAlarmOngoing = App.Current.IsAlarmActive;
 
         App.Current.PropertyChanged += App_PropertyChanged;
 
@@ -115,7 +117,10 @@ public class MainViewModel : ObservableObject, IDisposable
         ToggleShift5Command = new RelayCommand(ToggleShift5);
         ToggleShift6Command = new RelayCommand(ToggleShift6);
 
-        NavigateToAlarmCommand = new RelayCommand(NavigateToAlarm);
+        DismissAlarmCommand = new RelayCommand(DismissAlarm);
+        //TestCommand = new RelayCommand(Test);
+
+        //NavigateToAlarmCommand = new RelayCommand(NavigateToAlarm);
 
         App.Current.Dispatcher.StartTimer(TimeSpan.FromSeconds(1), () =>
         {
@@ -139,7 +144,7 @@ public class MainViewModel : ObservableObject, IDisposable
 
     public bool IsAlarmOngoing { get; private set; }
 
-    public ICommand NavigateToAlarmCommand { get; }
+    //public ICommand NavigateToAlarmCommand { get; }
 
     public ICommand ToggleShift0Command { get; }
 
@@ -154,6 +159,10 @@ public class MainViewModel : ObservableObject, IDisposable
     public ICommand ToggleShift5Command { get; }
 
     public ICommand ToggleShift6Command { get; }
+
+    //public ICommand TestCommand { get; }
+
+    public ICommand DismissAlarmCommand { get; }
 
     //public TimeSpan AlarmTime
     //{
@@ -211,8 +220,8 @@ public class MainViewModel : ObservableObject, IDisposable
 
     protected virtual void NavigateToAlarm()
     {
-        var alarmPage = _alarmPageFactory();
-        App.Current.MainPage = alarmPage;
+        //var alarmPage = _alarmPageFactory();
+        //App.Current.MainPage = alarmPage;
     }
 
     private void AlarmService_ScheduledTimeChanged(object? sender, EventArgs e)
@@ -414,5 +423,16 @@ public class MainViewModel : ObservableObject, IDisposable
         Random rd = new Random();
         int n = rd.Next(_lovetalks.Length - 1);
         return _lovetalks[n];
+    }
+
+    private void Test()
+    {
+        _alarmService?.SetAlarmTest();
+    }
+
+    private void DismissAlarm()
+    {
+        _alarmService.DismissAlarm();
+        _alarmService.EnsureAlarmIsSetIfEnabled();
     }
 }

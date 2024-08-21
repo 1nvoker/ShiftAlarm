@@ -6,16 +6,16 @@
     xmlns:local="clr-namespace:MauiCatAlarm"
     Shell.FlyoutBehavior="Disabled"
     Shell.ForegroundColor="Black"
-    TabBarBackgroundColor="Black" 
-    TabBarForegroundColor="Beige" 
-    TabBarUnselectedColor="Gray"
-    TabBarTitleColor="Beige"
+    TabBarBackgroundColor="Black"
+    TabBarForegroundColor="White"
+    TabBarUnselectedColor="White"
+    TabBarTitleColor="Gold"
     Title="MauiCatAlarm">
     <TabBar>
-        <Tab Title="排班闹钟">
+        <Tab Title="排班闹钟" Icon="Resources\Images\lf.png">
             <ShellContent ContentTemplate="{DataTemplate local:MainPage}" />
         </Tab>
-        <Tab Title="班次设置">
+        <Tab Title="班次设置" Icon="Resources\Images\sl.png">
             <ShellContent ContentTemplate="{DataTemplate local:SettingPage}" />
         </Tab>
     </TabBar>

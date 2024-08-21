@@ -3,6 +3,9 @@ using System.Globalization;
 
 using Android.App;
 using Android.Content;
+using Android.Content.PM;
+using Android.Provider;
+
 //using Android.Media;
 using Android.Runtime;
 using Android.Util;
@@ -203,6 +206,61 @@ public partial class AlarmService
                 Log.Info("AlarmService", $"OnShiftAlarmChanged shift{i} is disabled");
             }
         }
+    }
+
+    public async Task SetAlarmTest()
+    {
+        var status = await Permissions.CheckStatusAsync<SetAlarmPermission>();
+        if (status != PermissionStatus.Granted)
+        {
+            Log.Info("AlarmService", $"SetAlarmPermission CheckStatusAsync is {status}");
+            status = await Permissions.RequestAsync<SetAlarmPermission>();
+            if (status != PermissionStatus.Granted)
+            {
+                Log.Info("AlarmService", $"SetAlarmPermission RequestAsync is {status}");
+            }
+            else
+            {
+                Log.Info("AlarmService", $"SetAlarmPermission RequestAsync is {status}");
+            }
+        }
+        else
+        {
+            Log.Info("AlarmService", $"SetAlarmPermission CheckStatusAsync is {status}");
+        }
+
+        Intent intent = new Intent(AlarmClock.ActionSetAlarm)
+                       .PutExtra(AlarmClock.ExtraMessage, "测试闹钟设置") //用于标识闹钟的自定义消息
+                       .PutExtra(AlarmClock.ExtraHour, 16)  //闹钟的小时
+                       .PutExtra(AlarmClock.ExtraMinutes, 0)   //闹钟的分钟
+                       .PutExtra(AlarmClock.ExtraDays, 1)   //闹钟的天
+                       .SetPackage("com.huawei.deskclock");
+        //com.zhongke.alarm, com.huawei.deskclock, com.android.deskclock
+        if(Platform.AppContext.PackageManager != null)
+        {
+            ComponentName? a = intent.ResolveActivity(Platform.AppContext.PackageManager);
+            if (a != null)
+            {
+                Platform.AppContext.StartActivity(intent);
+                Log.Info("AlarmService", $"SetAlarmTest pack is {a.PackageName}, class is {a.ClassName}");
+            }
+            else
+            {
+                Platform.AppContext.StartActivity(intent);
+
+                Log.Info("AlarmService", $"a is null");
+            }
+            Platform.AppContext.StartForegroundService(intent);
+        }
+        else
+        {
+            Log.Info("AlarmService", $"Platform.AppContext.PackageManager is null");
+        }
+        //ComponentName? a = Platform.AppContext.StartForegroundService(intent);
+        //if(a != null)
+        //{
+        //    Log.Info("AlarmService", $"SetAlarmTest pack is {a.PackageName}, class is {a.ClassName}");
+        //}
     }
 
     //public async Task RequestandCheckPermission31()

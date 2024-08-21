@@ -27,7 +27,7 @@
                    IsVisible="{Binding IsAlarmOngoing}" />
             <Button Text="关掉闹钟"
                     IsVisible="{Binding IsAlarmOngoing}"
-                    Command="{Binding NavigateToAlarmCommand}"
+                    Command="{Binding DismissAlarmCommand}"
                     Style="{StaticResource DangerButton}"
                     Margin="0,0,0,40" />
 
@@ -118,6 +118,18 @@
                     BackgroundColor="{Binding BtnBackgroundColor0}"
                         TextColor="#000000"/>
             </HorizontalStackLayout>
+            
+            <!--<HorizontalStackLayout HorizontalOptions="CenterAndExpand"
+                                       Spacing="100"
+                                       Padding="5">
+                <Label Text="测试"
+                       VerticalOptions="Center"/>
+
+                <Button Text="测试"
+                    Command="{Binding TestCommand}"
+                    BackgroundColor="{Binding BtnBackgroundColor0}"
+                        TextColor="#000000"/>
+            </HorizontalStackLayout>-->
             
             <Label Text="献给至爱♥孙东晓♥:"
                    Margin="0,20,0,0"

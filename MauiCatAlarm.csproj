@@ -59,7 +59,7 @@
 		<MauiIcon Include="Resources\AppIcon\appicon.png" Color="#FFFFFF" />
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splash.png" Color="#45657E" />
+		<MauiSplashScreen Include="Resources\Splash\splash.png" BaseSize="400,400" Color="#45657E" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
@@ -92,9 +92,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="AlarmPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
 	  <MauiXaml Update="SettingPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

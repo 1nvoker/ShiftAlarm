@@ -58,8 +58,8 @@ public class ActiveAlarmService : Service
         Log.Info("AlarmMediaService", $"OnStartCommand {intent} {flags} {startId} Thread=" + Java.Lang.Thread.CurrentThread().Id);
         var context = ApplicationContext ?? throw new InvalidOperationException("Context not available.");
 
-        var alarmIntent = new Intent(context, typeof(AlarmActivity));
-        alarmIntent.AddFlags(ActivityFlags.NewTask | ActivityFlags.ClearTask);
+        var alarmIntent = new Intent(context, typeof(MainActivity));
+        //alarmIntent.AddFlags(ActivityFlags.NewTask | ActivityFlags.ClearTask);
         var pendingIntent = PendingIntent.GetActivity(context, 0, alarmIntent, PendingIntentFlags.Immutable);
 
         var notification = new NotificationCompat.Builder(context, MainApplication.ChannelId)

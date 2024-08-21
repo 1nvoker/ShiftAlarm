@@ -14,7 +14,7 @@ namespace MauiCatAlarm;
 [Activity(
     Theme = "@style/Maui.SplashTheme",
     MainLauncher = true,
-    LaunchMode = LaunchMode.SingleTop,
+    LaunchMode = LaunchMode.SingleTask,
     ConfigurationChanges = ConfigChanges.ScreenSize
                            | ConfigChanges.Orientation
                            | ConfigChanges.UiMode
@@ -49,6 +49,14 @@ public class MainActivity : MauiAppCompatActivity
     protected override void OnCreate(Bundle? savedInstanceState)
     {
         base.OnCreate(savedInstanceState);
+
+        //if (App.Current is not App app)
+        //    throw new InvalidOperationException("Could not find App instance.");
+
+        //var alarmPage = app.ServiceProvider.GetRequiredService<AlarmPage>();
+        //app.OpenWindow();
+        //app.OpenWindow(new Microsoft.Maui.Controls.Window(alarmPage));
+        //Log.Info("MainActivity", "Opened new window with AlarmPage");
 
         if (OperatingSystem.IsAndroidVersionAtLeast(31))
         {
